@@ -1,0 +1,39 @@
+.react-tabs {
+  &__tab {
+    font-weight: 500;
+    line-height: 22px;
+    color: $black40;
+    padding: 0;
+    padding-bottom: 5px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    &:not(:last-child) {
+      margin-right: 12px;
+    }
+    &-list {
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      margin-bottom: 16px;
+      border-bottom: none;
+    }
+    &--selected {
+      color: $black72;
+      border-bottom: 2px solid $primary-color;
+    }
+    &:focus {
+      color: $primary-color;
+      &:after {
+        content: "";
+        position: absolute;
+        height: 5px;
+        left: -4px;
+        right: -4px;
+        bottom: -5px;
+        background: none;
+      }
+    }
+  }
+}

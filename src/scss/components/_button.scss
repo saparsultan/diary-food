@@ -1,0 +1,91 @@
+@import "../variables";
+
+.btn {
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  grid-gap: 6px;
+  align-items: center;
+  padding: 8px 16px;
+  font-weight: 500;
+  line-height: 22px;
+  color: $white-color;
+  background-color: $primary-color;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color .2s ease-in-out;
+  &--add {
+    padding-left: 13px;
+    padding-right: 18px;
+    background-color: #dbf1e7;
+    svg {
+      stroke: $primary-color64;
+      transition: stroke .2s ease-in-out;
+    }
+    span {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: $primary-color64;
+      transition: color .2s ease-in-out;
+    }
+    &:hover {
+      background-color: $primary-color;
+      transition: all .2s ease-in-out;
+      span {
+        color: $white-color;
+        transition: color .2s ease-in-out;
+      }
+      svg {
+        stroke: $white-color;
+        stroke-opacity: 1;
+        transition: stroke .2s ease-in-out;
+      }
+    }
+  }
+  &--filter {
+    font-size: 14px;
+    line-height: 20px;
+    color: $black72;
+    background-color: $background-color;
+    padding: 4px 8px;
+    grid-gap: 0;
+  }
+  &--footer {
+    margin-top: 8px;
+  }
+  &--block {
+    grid-gap: 4px;
+    padding: 8px;
+    background-color: $black64;
+    border-radius: 8px;
+    svg {
+      stroke: $white-color;
+    }
+    span {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: $white-color;
+    }
+  }
+  &--upload {
+    grid-template-columns: 1fr;
+    grid-gap: 8px;
+    justify-items: center;
+    width: 100px;
+    height: 100px;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    color: $black64;
+    padding: 12px 20px;
+    background-color: $background-color;
+    border-radius: 16px;
+  }
+}
+
+.custom-input {
+  width: 100%;
+  background-color: $white-color;
+}

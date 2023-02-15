@@ -1,0 +1,22 @@
+.search {
+  position: relative;
+  margin-bottom: 20px;
+  &__input {
+    font-weight: 500;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 40px;
+    border-radius: 50px;
+  }
+  &__icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+}

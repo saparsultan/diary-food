@@ -1,0 +1,86 @@
+.recipe-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
+}
+
+.recipe {
+  position: relative;
+  padding: 20px 16px;
+  background-color: $white-color;
+  border-radius: 24px;
+  &__title {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 22px;
+    margin-bottom: 12px;
+  }
+  &__btns {
+    position: absolute;
+    right: 28px;
+    bottom: 32px;
+    display: inline-grid;
+    grid-template-columns: max-content max-content;
+    grid-gap: 7px;
+  }
+}
+
+.nutri-value {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 13.75px;
+    max-width: 322px;
+    width: 100%;
+    padding: 8px 12px;
+    background-color: $background-color;
+    border-radius: 16px;
+    margin-bottom: 8px;
+  }
+  &__info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 4px;
+    align-items: center;
+  }
+  &__name {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  &__sum {
+    line-height: 22px;
+  }
+  &__img {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+}
+
+.recipe-uses {
+  display: grid;
+  grid-template-columns: repeat(6, max-content);
+  grid-gap: 12px;
+  align-items: center;
+  margin-top: 4px;
+  li {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 4px; 
+    input {
+      width: 16px;
+      height: 16px;
+      border: 1px solid $primary-color;
+    }
+    label {
+      font-weight: 500;
+      color: $black64;
+      line-height: 1;
+    }
+  }
+}

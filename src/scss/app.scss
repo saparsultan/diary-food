@@ -1,0 +1,90 @@
+@import 'fonts';
+@import 'variables';
+@import 'react-tab';
+@import 'libs/normalize';
+@import 'components/all';
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'SFProRounded', sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #dbf1e7;
+  color: $black;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 16px;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-gap: 16px;
+}
+
+.df {
+  display: flex;
+  align-items: center; 
+}
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 15px;
+  max-width: 970px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer {
+  padding-top: 8px;
+}
+
+.content {
+  position: relative;
+}
+
+.filter {
+  background-color: $white-color;
+  padding: 16px;
+  padding-bottom: 12px;
+  border-radius: 24px;
+  &-grid {
+    position: absolute;
+    top: 0;
+    right: -256px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 8px;
+    max-width: 240px;
+    width: 100%;
+  }
+  &__title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 22px;
+    margin-bottom: 12px;
+  }
+  &__list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-right: -4px;
+    margin-left: -4px;
+    div {
+      margin: 4px;
+      &:not(:last-child) {
+        margin-right: 8px;
+      }
+    }
+  }
+}
