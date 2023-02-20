@@ -87,4 +87,85 @@ body {
       }
     }
   }
+  &__recipe-uses {
+    margin-left: -4px;
+    margin-right: -4px;
+
+    li {
+      margin: 4px;
+      label {
+        padding: 6px 12px;
+        transition: all .2s ease-out;
+      }
+    }
+  }
+  &-calories {
+    display: grid;
+    grid-template-columns: 1fr 16px 1fr;
+    grid-gap: 8px;
+    span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: max-content;
+      color: $black64;
+    }
+  }
+}
+
+.eating-list {
+  display: grid;
+  grid-template-columns: repeat(3, min-content);
+  grid-gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 32px;
+
+  input {
+    display: none;
+  }
+  &__item {
+    position: relative;
+    padding-bottom: 5px;
+    font-weight: 500;
+    line-height: 138%;
+    color: $black40;
+    cursor: pointer;
+    &::after {
+      position: absolute;
+      content: "";
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: transparent;
+    }
+    &--active {
+      color: $black;
+      &::after {
+        background-color: $primary-color;
+      }
+    }
+  }
+}
+
+.diary {
+  &-result {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 16px;
+    width: 100%;
+    margin-bottom: 32px;
+    span {
+      font-size: 20px;
+      line-height: 110%;
+      color: $black72;
+    }
+    &__item {
+      text-align: center;
+    }
+    &__item-sum {
+      color: $primary-color!important;
+    }
+  }
 }

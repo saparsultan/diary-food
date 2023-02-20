@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import logo from '../assets/images/logo.svg'
-import { CREATE_PRODUCT, CREATE_RECIPE, RECIPES, FAVORITES } from '../utils/consts';
+import { CREATE_PRODUCT, CREATE_RECIPE, RECIPES, FAVORITES, ADD_DIARY } from '../utils/consts';
 
 const Header = () => {
   let {pathname} = useLocation();
@@ -22,9 +22,11 @@ const Header = () => {
                     case CREATE_RECIPE:
                       return 'Создать рецепт';
                     case RECIPES:
-                      return 'Рецепты';
+                      return 'Все рецепты';
                     case FAVORITES:
                       return 'Избранное';
+                    case ADD_DIARY:
+                      return 'Добавить в дневник';
                     default: 
                       return 'Дневник питания'
                   }

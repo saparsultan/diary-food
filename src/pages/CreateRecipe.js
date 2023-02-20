@@ -14,7 +14,7 @@ const CreateRecipe = (props) => {
   const [recipeUsesValue, setRecipeUsesValue] = React.useState([]);
   const [newDescription, setNewDescription] = React.useState(null);
   const [imageUpload, setImageUpload] = React.useState();
-  const [selectProduct, setSelectProduct] = React.useState(null);
+  const [selectProduct, setSelectProduct] = React.useState([]);
   const [amountWeight, setAmountWeight] = React.useState(0);
   const [recipeProduct, setRecipeProduct] = React.useState([]);
 
@@ -27,6 +27,7 @@ const CreateRecipe = (props) => {
         return newValObj[keyString];
       });
       setAllProducts(newObjArray);
+      setSelectProduct(newObjArray[0])
     });
     function cleanup() {
       unregisterFunction();
@@ -48,18 +49,20 @@ const CreateRecipe = (props) => {
   };
 
   const uniqueProducts = [...new Set(allProducts.map((item) => item))];
-  const optionProducts = uniqueProducts.map((product) => {
+  const optionProducts = uniqueProducts.map((product, id) => {
     return (
-      <option key={product.name} value={product.name}>
-        {product.name}
+      <option key={product?.name + id} value={product?.name}>
+        {product?.name}
       </option>
     );
   });
 
+  console.log("uniqueProducts", selectProduct)
+
   const optionCategoriesDishes = categoriesDishes.map((category, id) => {
     return (
-      <option key={category + id} value={category}>
-        {category}
+      <option key={category?.id + id} value={category?.value}>
+        {category?.name}
       </option>
     );
   });

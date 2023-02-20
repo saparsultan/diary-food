@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { database } from "../firebase-config";
 import { ref, set } from "firebase/database";
 import { v4 } from "uuid";
@@ -10,7 +10,7 @@ const CreateProduct = () => {
   const [newProteins, setNewProteins] = React.useState(0);
   const [newFats, setNewFats] = React.useState(0);
   const [newCarbs, setNewCarbs] = React.useState(0);
-  const [selectUnit, setSelectUnit] = React.useState("100 г(мл)");
+  const [selectUnit, setSelectUnit] = React.useState("г(мл)");
 
   const handleChange = (e) => {
     setSelectUnit(e.target.value);
@@ -58,46 +58,42 @@ const CreateProduct = () => {
             onChange={handleChange}
           >
             <option disabled>Выбрать</option>
-            <option defaultValue="100 г(мл)">
-              100 г(мл)
-            </option>
+            <option defaultValue="г(мл)">г(мл)</option>
             <option value="Пачка">Пачка</option>
             <option value="Порция">Порция</option>
             <option value="Штука">Штука</option>
             <option value="Таблетка">Таблетка</option>
           </select>
         </div>
-        {selectUnit !== "100 г(мл)" ? (
-          <div className="form-item">
-            <label className="form-item__label">
-              Вес{" "}
-              {(() => {
-                switch (selectUnit) {
-                  case "Пачка":
-                    return "одной пачки";
-                  case "Порция":
-                    return "одной порции";
-                  case "Штука":
-                    return "одной штуки";
-                  case "Таблетка":
-                    return "одной таблетки";
-                  default:
-                    return "одного измерения";
-                }
-              })()}
-              :
-            </label>
-            <input
-              type="number"
-              value={newWeight}
-              className="form-item__input"
-              placeholder="г(мл)"
-              onChange={(e) => setNewWeight(e.target.value)}
-            />
-          </div>
-        ) : (
-          ""
-        )}
+        <div className="form-item">
+          <label className="form-item__label">
+            Вес{" "}
+            {(() => {
+              switch (selectUnit) {
+                case "г(мл)":
+                  return "одного г(мл)";
+                case "Пачка":
+                  return "одной пачки";
+                case "Порция":
+                  return "одной порции";
+                case "Штука":
+                  return "одной штуки";
+                case "Таблетка":
+                  return "одной таблетки";
+                default:
+                  return "одного измерения";
+              }
+            })()}
+            :
+          </label>
+          <input
+            type="number"
+            value={newWeight}
+            className="form-item__input"
+            placeholder="г(мл)"
+            onChange={(e) => setNewWeight(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="form-block">

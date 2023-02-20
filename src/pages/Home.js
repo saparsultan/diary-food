@@ -1,70 +1,142 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import { getDatabase, ref, onValue } from "firebase/database";
+import SelectDate from "../components/SelectDate";
+import SelectEating from "../components/SelectEating";
+import RecipeItem from "../components/RecipeItem";
+import EmptyDiary from "../components/EmptyDiary";
 
-const Home = () => {
+const Home = ({ allRecipes }) => {
+  const [startDate, setStartDate] = useState(new Date());
+  const [eating, setEating] = useState("breakfast");
+  const [diaryList, setDiaryList] = useState([]);
+  const [recomCalories, setRecomCalories] = useState([]);
+
+  const handleSelectDate = (value) => {
+    setStartDate(value);
+  };
+  const handleChangeEating = (value) => {
+    setEating(value.target.value);
+  };
+
+  const db = getDatabase();
+
+  useEffect(() => {
+    const foodDiary = ref(
+      db,
+      `diary/${startDate.toString().slice(0, 15)}/${eating}`
+    );
+    const unregisterFunction = onValue(foodDiary, (snapshot) => {
+      const newValObj = snapshot.val();
+      if (newValObj !== null) {
+        const keys = Object.keys(newValObj);
+        const newObjArray = keys.map((keyString) => {
+          return newValObj[keyString];
+        });
+        setDiaryList(newObjArray);
+      } else {
+        setDiaryList([]);
+      }
+    });
+
+    function cleanup() {
+      unregisterFunction();
+    }
+    return cleanup;
+  }, [startDate, eating]);
+
+  useEffect(() => {
+    const foodDiary = ref(
+      db,
+      `diary/${startDate.toString().slice(0, 15)}/recomCalories`
+    );
+    const unregisterFunction = onValue(foodDiary, (snapshot) => {
+      const newValObj = snapshot.val();
+      if (newValObj !== null) {
+        console.log(":newValObj", newValObj);
+        const keys = Object.keys(newValObj);
+        const newObjArray = keys.map((keyString) => {
+          return newValObj[keyString];
+        });
+        setRecomCalories(newObjArray);
+      } else {
+        setRecomCalories("");
+      }
+    });
+
+    function cleanup() {
+      unregisterFunction();
+    }
+    return cleanup;
+  }, [startDate]);
+
+  let foodDiaryNames = [];
+  for (let i = 0; i < diaryList.length; i++) {
+    if (diaryList.length) {
+      foodDiaryNames.push(diaryList[i].foodName);
+    }
+  }
+
+  const newAllRecipesFunc = () => {
+    const data = allRecipes.filter((row) => foodDiaryNames.includes(row[0]));
+    return data;
+  };
+  const newAllRecipes = newAllRecipesFunc();
+
+  console.log("newAllRecipes", newAllRecipes)
+
+  let sumArray = []
+  for (let i = 0; i < newAllRecipes.length; i++) {
+    if (diaryList.length) {
+      let newArray = newAllRecipes[i][1].products.reduce(
+        (acc, current) => acc + +current.calories,
+        0
+      );
+      sumArray.push(newArray)
+    }
+  }
+
+  const newArray = sumArray.reduce(
+    (acc, current) => acc + +current,
+    0
+  );
+
   return (
     <>
-      <div className="tabs">
-        <div className="tab tab--active">
-          Состав
-        </div>
-        <div className="tab">
-          Описание
-        </div>
-      </div>
+      <SelectDate selected={startDate} handleSelectDate={handleSelectDate} />
+      <SelectEating value={eating} handleChangeEating={handleChangeEating} />
 
-      <div className="form-block">
-        <div className="form-item">
-          <label className="form-item__label">
-            Название:
-          </label>
-          <input type="text" className="form-item__input" placeholder="Введите название блюда"/>
-        </div>
-        <div className="form-item">
-          <label className="form-item__label">
-            Категория:
-          </label>
-          <select name="" id="" className="form-item__input form-item__select">
-            <option disabled>Выбрать</option>
-            <option value="value1">Значение 1</option>
-            <option value="value2" selected>Значение 2</option>
-            <option value="value3">Значение 3</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="form-block">
-        <div className="form-title">
-          Ингредиенты
-        </div>
-        <div className="form-item">
-          <label className="form-item__label">
-            Название:
-          </label>
-          <select name="" id="" className="form-item__input form-item__select">
-            <option disabled>Выбрать</option>
-            <option value="value1">Значение 1</option>
-            <option value="value2" selected>Значение 2</option>
-            <option value="value3">Значение 3</option>
-          </select>
-        </div>
-        <div className="form-footer">
-          <button className="btn btn--add">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 3.75V16.25M16.25 10H3.75" strokeOpacity="0.64" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <span>
-              Добавить ещё
-            </span>
-          </button>
-        </div>
-      </div>
-      <div className="footer">
-        <button className="btn">
-          Сохранить
-        </button>
-      </div>
+      {newAllRecipes.length ? (
+        <>
+          <div className="diary-result">
+            <div className="diary-result__item">
+              <span>Рекомендуемая калорийность за день:&nbsp;</span>
+              <span className="diary-result__item-sum">
+                {recomCalories[recomCalories.length - 1]} kCal
+              </span>
+            </div>
+            <div className="diary-result__item">
+              <span>Всего калорий:&nbsp;</span>
+              <span className="diary-result__item-sum">
+                {newArray} kCal
+              </span>
+            </div>
+          </div>
+          <div className="recipe-grid">
+            {newAllRecipes.map((data, index) => (
+              <RecipeItem
+                key={data[0] + index}
+                data={data}
+                date={startDate}
+                eating={eating}
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        <EmptyDiary />
+      )}
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
