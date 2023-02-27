@@ -11,10 +11,31 @@ import AllRecipes from "./pages/AllRecipes";
 import Favorites from "./pages/Favorites";
 import RecipePage from "./pages/RecipePage";
 import "react-tabs/style/react-tabs.scss";
+import Login from "./pages/LoginPage";
+import LoginPage from "./pages/LoginPage";
+import RegistrationPage from "./pages/RegistrationPage";
+import { auth } from "./firebase-config";
+import { onAuthStateChanged } from "firebase/auth";
+import Blog from "./pages/Blog";
+import Profile from "./pages/Profile";
 
 function App() {
   const [allRecipes, setAllRecipes] = useState([]);
-  const [state, setState] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        localStorage.setItem("isAuth", true);
+        localStorage.setItem("user.uid", user?.uid);
+        localStorage.setItem("user.email", user?.email);
+        localStorage.setItem("user.name", user?.displayName);
+        console.log("user", user)
+      } else {
+        return;
+      }
+    });
+    return () => unsubscribe();
+  }, [auth]);
 
   useEffect(() => {
     const db = getDatabase();
@@ -25,9 +46,8 @@ function App() {
       // const newObjArray = keys.map((keyString) => {
       //   return newValObj[keyString[0]];
       // });
-      console.log("newObjArray",keys)
+      console.log("newObjArray", keys);
       setAllRecipes(keys);
-
     });
 
     function cleanup() {
@@ -36,8 +56,7 @@ function App() {
     return cleanup;
   }, []);
 
-console.log("AllRecipes", allRecipes)
-console.log("state", state)
+  console.log("AllRecipes", allRecipes);
   return (
     <div className="app">
       <Header />
@@ -47,17 +66,49 @@ console.log("state", state)
             <Menu />
             <div className="content">
               <Routes>
-                <Route path="/" exact element={<Home allRecipes={allRecipes} />} />
+                <Route path="login" exact element={<LoginPage />} />
+                <Route path="profile" exact element={<Profile />} />
+                <Route
+                  path="registration"
+                  exact
+                  element={<RegistrationPage />}
+                />
+                <Route
+                  path="/"
+                  exact
+                  element={<Home allRecipes={allRecipes} />}
+                />
                 <Route path="create-recipe" exact element={<CreateRecipe />} />
                 <Route
                   path="create-product"
                   exact
                   element={<CreateProduct />}
                 />
-                <Route path="add-diary" exact element={<FoodDiary allRecipes={allRecipes} />} />
-                <Route path="diary" exact element={<FoodDiary allRecipes={allRecipes} />} />
-                <Route path="recipes" exact element={<AllRecipes allRecipes={allRecipes} />} />
-                <Route path="favorites" exact element={<Favorites allRecipes={allRecipes} />} />
+                <Route
+                  path="add-diary"
+                  exact
+                  element={<FoodDiary allRecipes={allRecipes} />}
+                />
+                <Route
+                  path="diary"
+                  exact
+                  element={<FoodDiary allRecipes={allRecipes} />}
+                />
+                <Route
+                  path="recipes"
+                  exact
+                  element={<AllRecipes allRecipes={allRecipes} />}
+                />
+                <Route
+                  path="blog"
+                  exact
+                  element={<Blog />}
+                />
+                <Route
+                  path="favorites"
+                  exact
+                  element={<Favorites allRecipes={allRecipes} />}
+                />
                 <Route path="recipes/:id" element={<RecipePage />} />
               </Routes>
             </div>

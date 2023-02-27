@@ -1,8 +1,8 @@
 const CaloriesFilter = ({
-  calories1,
-  calories2,
-  handleCalories1,
-  handleCalories2,
+  minCalories,
+  maxCalories,
+  handleChangeMinCalories,
+  handleChangeMaxCalories,
 }) => {
   return (
     <>
@@ -13,16 +13,18 @@ const CaloriesFilter = ({
             type="number"
             className="form-item__input"
             placeholder="0"
-            value={calories1}
-            onChange={(e) => handleCalories1(e.target.value)}
+            min="0"
+            value={minCalories}
+            onChange={handleChangeMinCalories}
           />
           <span>—</span>
           <input
             type="number"
             className="form-item__input"
             placeholder="0"
-            value={calories2}
-            onChange={(e) => handleCalories2(e.target.value)}
+            min="0"
+            value={maxCalories}
+            onChange={handleChangeMaxCalories}
           />
         </div>
       </div>

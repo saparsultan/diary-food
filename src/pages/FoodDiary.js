@@ -17,12 +17,11 @@ const FoodDiary = ({ allRecipes }) => {
   const [category, setCategory] = React.useState("");
   const [eating, setEating] = React.useState("breakfast");
   const [recomCalories, setRecomCalories] = React.useState("");
-  const [calories1, setCalories1] = React.useState(0);
-  const [calories2, setCalories2] = React.useState(0);
+  const [minCalories, setMinCalories] = React.useState(0);
+  const [maxCalories, setMaxCalories] = React.useState(0);
 
   const [recipeUsesValue, setRecipeUsesValue] = React.useState(recipeUses);
   const [list, setList] = React.useState([]);
-
 
   const handleSelectDate = (value) => {
     setStartDate(value);
@@ -36,12 +35,16 @@ const FoodDiary = ({ allRecipes }) => {
     setCategory(value);
   };
 
-  const handleCalories1 = (value) => {
-    setCalories1(value);
+  const handleChangeMinCalories = ({ target }) => {
+    let { value, min } = target;
+    value = Math.max(Number(min), Math.min(Number(value)));
+    setMinCalories(value);
   };
 
-  const handleCalories2 = (value) => {
-    setCalories2(value);
+  const handleChangeMaxCalories = ({ target }) => {
+    let { value, min } = target;
+    value = Math.max(Number(min), Math.min(Number(value)));
+    setMaxCalories(value);
   };
 
   const handleChangeEating = (value) => {
@@ -69,6 +72,22 @@ const FoodDiary = ({ allRecipes }) => {
         (item) =>
           item[1].name.toLowerCase().search(query.toLowerCase().trim()) !== -1
       );
+    }
+
+    if (minCalories > 0 && maxCalories > 0) {
+      updatedList = updatedList.filter((item) => {
+        let result = false;
+        let sumCalories = item[1].products.reduce(
+          (acc, current) => acc + +current.calories,
+          0
+        );
+        if (sumCalories >= minCalories && sumCalories <= maxCalories) {
+          result = true;
+        } else {
+          return result;
+        }
+        return result;
+      });
     }
 
     if (recipeUsesValue[0].check) {
@@ -116,12 +135,12 @@ const FoodDiary = ({ allRecipes }) => {
 
   useEffect(() => {
     applyFilters();
-  }, [query, category, recipeUsesValue]);
+  }, [query, category, recipeUsesValue, minCalories, maxCalories]);
 
   return (
     <>
       <SelectDate selected={startDate} handleSelectDate={handleSelectDate} />
-      <div className="form-item" style={{marginTop: "20px"}}>
+      <div className="form-item" style={{ marginTop: "20px" }}>
         <label className="form-item__label" style={{ marginBottom: "4px" }}>
           Рекомендуемая калорийность
         </label>
@@ -137,12 +156,17 @@ const FoodDiary = ({ allRecipes }) => {
       <SelectEating value={eating} handleChangeEating={handleChangeEating} />
 
       <div className="recipe-grid__wrap">
-        <div className="recipe-grid__title">
-        Подобрено {list.length}
-        </div>
+        <div className="recipe-grid__title">Подобрено {list.length}</div>
         <div className="recipe-grid">
           {list.map((data, index) => (
-            <RecipeItem key={data[0] + index} data={data} date={startDate} eating={eating} recomCalories={recomCalories} isDiary />
+            <RecipeItem
+              key={data[0] + index}
+              data={data}
+              date={startDate}
+              eating={eating}
+              recomCalories={recomCalories}
+              isDiary
+            />
           ))}
         </div>
       </div>
@@ -152,10 +176,10 @@ const FoodDiary = ({ allRecipes }) => {
           <Search query={query} handleQuery={handleQuery} />
           <CategoryFilter category={category} handleCategory={handleCategory} />
           <CaloriesFilter
-            calories1={calories1}
-            calories2={calories2}
-            handleCalories1={handleCalories1}
-            handleCalories2={handleCalories2}
+            minCalories={minCalories}
+            maxCalories={maxCalories}
+            handleChangeMinCalories={handleChangeMinCalories}
+            handleChangeMaxCalories={handleChangeMaxCalories}
           />
           <RecipeUsesFilter
             data={recipeUsesValue}

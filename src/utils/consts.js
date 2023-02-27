@@ -1,5 +1,9 @@
+export const HOME = '/';
 export const CREATE_PRODUCT = '/create-product';
 export const CREATE_RECIPE = '/create-recipe';
 export const ADD_DIARY = '/add-diary';
 export const RECIPES = '/recipes';
+export const BLOG = '/blog';
 export const FAVORITES = '/favorites';
+export const LOGIN = '/login';
+export const REGISTRATION = '/registration';

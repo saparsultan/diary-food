@@ -1,0 +1,12 @@
+.blog {
+  &-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 16px;
+  }
+  &-item {
+    background-color: $white-color;
+    padding: 16px;
+    border-radius: 16px;
+  }
+}

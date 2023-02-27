@@ -1,0 +1,28 @@
+.profile {
+  background-color: $white-color;
+  padding: 16px;
+  border-radius: 16px;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 16px;
+  }
+  &__main {
+    padding-top: 20px;
+  }
+  &-item {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 4px;
+    label {
+      font-size: 14px;
+      font-weight: 500;
+      color: $black40;
+    }
+  }
+}

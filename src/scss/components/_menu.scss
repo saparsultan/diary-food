@@ -1,3 +1,42 @@
+.menu {
+  height: min-content;
+  background-color: $white-color;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.user {
+  padding: 20px;
+  &__header {
+    display: flex;
+    align-items: flex-start;
+  }
+  &__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+    font-weight: 600;
+    color: $black72;
+    margin-right: 8px;
+    background-color: $background-color;
+    border-radius: 8px;
+  }
+  &__name {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    line-height: 1.2;
+    color: $black72;
+  }
+  &__link {
+    margin-bottom: 2px;
+    font-size: 13px;
+    color: $primary-color;
+  }
+}
+
 .nav {
   display: grid;
   grid-template-columns: 1fr;
@@ -8,6 +47,7 @@
     height: fit-content;
     padding: 20px;
     background-color: $white-color;
+    border-top: 2px solid $background-color;
     border-radius: 16px;
   }
   &__item {
@@ -30,3 +70,4 @@
     }
   }
 }
+
