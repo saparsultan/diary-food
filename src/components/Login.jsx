@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  updateProfile 
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase-config";
 import { Link } from "react-router-dom";
-import { HOME } from "../utils/consts";
+import { HOME, LOGIN } from "../utils/consts";
 
 const Login = ({ type }) => {
   const navigate = useNavigate();
@@ -15,26 +15,29 @@ const Login = ({ type }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleAuthorization = (e) => {
+  const handleAuthorization = async (e) => {
     e.preventDefault();
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log("userCredential", userCredential);
-        localStorage.setItem("user", JSON.stringify(userCredential.user));
-        navigate(`${HOME}`);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate(`${HOME}`);
+      window.location.reload();
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const handleRegistration = async (e) => {
     e.preventDefault();
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       await updateProfile(user, { displayName });
-      navigate(`${HOME}`);
+      navigate(`${LOGIN}`);
+      window.location.reload();
       console.log(user);
     } catch (error) {
       console.log(error.message);
@@ -44,9 +47,7 @@ const Login = ({ type }) => {
   return (
     <div className="login__container">
       <div className="login__title">
-        {
-          type === "authorization" ? "Авторизация" : "Регистрация"
-        }
+        {type === "authorization" ? "Авторизация" : "Регистрация"}
       </div>
       <form
         onSubmit={

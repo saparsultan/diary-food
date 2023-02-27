@@ -25,4 +25,20 @@
       color: $black40;
     }
   }
+  &-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    background-color: $background-color;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+}
+
+.blog-create {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
 }

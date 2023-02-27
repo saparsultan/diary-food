@@ -140,15 +140,15 @@
     span {
       width: 342px;
       color: $black64;
-      &:last-child {
-        width: auto;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 0;
-        color: #e45c5c; 
-        cursor: pointer;
-      }
     }
+  }
+  &__delete {
+    width: auto!important;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    color: #e45c5c; 
+    cursor: pointer;
   }
 }

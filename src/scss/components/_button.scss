@@ -43,6 +43,15 @@
       }
     }
   }
+  &--primary {
+    color: $white-color;
+    background-color: $primary-color;
+    transition: opacity .2s ease-out;
+    &:hover {
+      opacity: .8;
+      transition: opacity .2s ease-out;
+    }
+  }
   &--filter {
     font-size: 14px;
     line-height: 20px;

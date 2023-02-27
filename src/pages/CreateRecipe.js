@@ -191,7 +191,7 @@ const CreateRecipe = (props) => {
                   <li key={product.name + index}>
                     <span>{product.name}</span>
                     <span>{`${product.amount} ${product.unit}`}</span>
-                    <span onClick={() => deleteProduct(product?._id)}>
+                    <span className="recipe-products__delete" onClick={() => deleteProduct(product?._id)}>
                       Удалить х
                     </span>
                   </li>

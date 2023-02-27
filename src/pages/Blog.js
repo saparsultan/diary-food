@@ -5,11 +5,11 @@ const Blog = () => {
     <div className="blog-list">
       <div className="blog-list__item card blog-item">
         <div className="card-header">
-          <div class="author">
-            <div class="author__avatar"></div>
-            <div class="author__text">
-              <div class="author__name">Айгерим</div>
-              <div class="author__date">26.01.2023</div>
+          <div className="author">
+            <div className="author__avatar"></div>
+            <div className="author__text">
+              <div className="author__name">Айгерим</div>
+              <div className="author__date">26.01.2023</div>
             </div>
           </div>
           <div></div>
@@ -18,7 +18,7 @@ const Blog = () => {
           <div className="card-main__title">Легкий способ бросить худеть</div>
         </div>
         <div
-          class="card-main__img"
+          className="card-main__img"
           style={{ padding: "16px", marginBottom: "0" }}
         >
           <img
@@ -30,11 +30,11 @@ const Blog = () => {
       </div>
       <div className="blog-list__item card blog-item">
         <div className="card-header">
-          <div class="author">
-            <div class="author__avatar"></div>
-            <div class="author__text">
-              <div class="author__name">Айгерим</div>
-              <div class="author__date">26.01.2023</div>
+          <div className="author">
+            <div className="author__avatar"></div>
+            <div className="author__text">
+              <div className="author__name">Айгерим</div>
+              <div className="author__date">26.01.2023</div>
             </div>
           </div>
           <div></div>
@@ -43,7 +43,7 @@ const Blog = () => {
           <div className="card-main__title">Легкий способ бросить худеть</div>
         </div>
         <div
-          class="card-main__img"
+          className="card-main__img"
           style={{ padding: "16px", marginBottom: "0" }}
         >
           <img

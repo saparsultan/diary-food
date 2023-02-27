@@ -1,28 +1,53 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import { ADD_DIARY } from "../utils/consts";
+import React, { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { ADD_DIARY, BLOG, HOME, PRODUCTS, PROFILE, RECIPES } from "../utils/consts";
 
 const Menu = () => {
-  const userName = localStorage.getItem("user.name")
-  const userAvatar = userName[0]?.toUpperCase();
+  const [isAuth, setIsAuth] = useState(false)
+  const [userName, setUserName] = useState("")
+
+  const userNameValue = localStorage.getItem("user.name");
+  const isAuthValue = localStorage.getItem("isAuth");
+  const isAuthBooleanValue = JSON.parse(isAuthValue);
+
+  useEffect(() => {
+    setIsAuth(isAuthBooleanValue);
+    setUserName(userNameValue)
+  }, [isAuthBooleanValue, userNameValue])
+
+  // const userName = localStorage.getItem("user.name");
+  // const isAuthValue = localStorage.getItem("isAuth");
+  // const isAuth = JSON.parse(isAuthValue);
   let activeClassName = "nav__link--active";
 
   return (
     <div className="menu">
       <div className="user">
         <div className="user__header">
-          <div className="user__avatar">{userAvatar}</div>
+          <div className="user__avatar">
+            {userName ? userName[0]?.toUpperCase() : "Г"}
+          </div>
           <div className="user__text">
-            <div className="user__name">{userName}</div>
-            <a className="user__link">В личный кабинет</a>
+            <div className="user__name">{userName ? userName : "Гость"}</div>
+            {isAuth && (
+              <Link to={PROFILE} className="user__link">
+                В личный кабинет
+              </Link>
+            )}
           </div>
         </div>
-        <div className="user__footer"></div>
+        {!isAuth && (
+          <div className="user__footer">
+            <Link to="login" className="auth-btn auth-btn--primary">
+              Войти
+            </Link>
+          </div>
+        )}
       </div>
       <nav className="nav__container">
         <ul className="nav">
           <li className="nav__item">
-            <NavLink className="nav__link" to="/">
+            <NavLink className="nav__link" to={HOME}>
               {({ isActive }) => (
                 <>
                   <svg
@@ -61,14 +86,14 @@ const Menu = () => {
                     />
                   </svg>
                   <span className={isActive ? activeClassName : undefined}>
-                    Добавить <br />в дневник
+                    Добавить в дн...
                   </span>
                 </>
               )}
             </NavLink>
           </li>
           <li className="nav__item">
-            <NavLink className="nav__link" to="recipes">
+            <NavLink className="nav__link" to={RECIPES}>
               {({ isActive }) => (
                 <>
                   <svg
@@ -120,7 +145,7 @@ const Menu = () => {
             </a>
           </li>
           <li className="nav__item">
-            <NavLink to="blog" className="nav__link">
+            <NavLink to={BLOG} className="nav__link">
               {({ isActive }) => (
                 <>
                   <svg
@@ -178,7 +203,9 @@ const Menu = () => {
             </NavLink>
           </li>
           <li className="nav__item">
-            <a href="" className="nav__link">
+          <NavLink to={PRODUCTS} className="nav__link">
+              {({ isActive }) => (
+                <>
               <svg
                 width="22"
                 height="22"
@@ -194,8 +221,12 @@ const Menu = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-              <span>Все продукты</span>
-            </a>
+                  <span className={isActive ? activeClassName : undefined}>
+                  Все продукты
+                  </span>
+                </>
+              )}
+            </NavLink>
           </li>
         </ul>
       </nav>

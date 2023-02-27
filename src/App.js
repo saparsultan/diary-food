@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, limitToLast, query } from "firebase/database";
 import Header from "./components/Header";
 import Menu from "./components/Menu";
 import Home from "./pages/Home";
@@ -18,9 +18,20 @@ import { auth } from "./firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
 import Blog from "./pages/Blog";
 import Profile from "./pages/Profile";
+import ProductsPage from "./pages/ProductsPage";
+import CreateBlog from "./pages/CreateBlog";
+import { ADD_DIARY, BLOG, CREATE_BLOG, CREATE_RECIPE, FAVORITES, HOME, LOGIN, MEASURING, PRODUCTS, PROFILE, RECIPES, RECIPE_PAGE, REGISTRATION } from "./utils/consts";
+import Measuring from "./pages/Measuring";
 
 function App() {
+  const isAuthValue = localStorage.getItem("isAuth");
+  const isAuthBooleanValue = JSON.parse(isAuthValue);
+  const [isAuth, setIsAuth] = useState(false)
   const [allRecipes, setAllRecipes] = useState([]);
+
+  useEffect(() => {
+    setIsAuth(isAuthBooleanValue);
+  }, [isAuthBooleanValue])
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -29,18 +40,22 @@ function App() {
         localStorage.setItem("user.uid", user?.uid);
         localStorage.setItem("user.email", user?.email);
         localStorage.setItem("user.name", user?.displayName);
+        localStorage.setItem("user.creation", user?.metadata?.creationTime);
         console.log("user", user)
       } else {
         return;
       }
     });
     return () => unsubscribe();
-  }, [auth]);
+  }, []);
+
+  let limitNumber = 4;
 
   useEffect(() => {
     const db = getDatabase();
     const recipes = ref(db, "recipes");
-    const unregisterFunction = onValue(recipes, (snapshot) => {
+    const lastTenArticlesQuery = query(recipes, limitToLast(limitNumber));
+    const unregisterFunction = onValue(lastTenArticlesQuery, (snapshot) => {
       const newValObj = snapshot.val();
       const keys = Object.entries(newValObj);
       // const newObjArray = keys.map((keyString) => {
@@ -54,7 +69,7 @@ function App() {
       unregisterFunction();
     }
     return cleanup;
-  }, []);
+  }, [limitNumber]);
 
   console.log("AllRecipes", allRecipes);
   return (
@@ -66,50 +81,62 @@ function App() {
             <Menu />
             <div className="content">
               <Routes>
-                <Route path="login" exact element={<LoginPage />} />
-                <Route path="profile" exact element={<Profile />} />
+                <Route path={LOGIN} exact element={<LoginPage />} />
+                {
+                  isAuth && <Route path={PROFILE} exact element={<Profile />} />
+                }
                 <Route
-                  path="registration"
+                  path={REGISTRATION}
                   exact
                   element={<RegistrationPage />}
                 />
                 <Route
-                  path="/"
+                  path={HOME}
                   exact
                   element={<Home allRecipes={allRecipes} />}
                 />
-                <Route path="create-recipe" exact element={<CreateRecipe />} />
+                <Route path={CREATE_RECIPE} exact element={<CreateRecipe />} />
                 <Route
                   path="create-product"
                   exact
                   element={<CreateProduct />}
                 />
                 <Route
-                  path="add-diary"
+                  path={CREATE_BLOG}
+                  exact
+                  element={<CreateBlog />}
+                />
+                <Route
+                  path={ADD_DIARY}
                   exact
                   element={<FoodDiary allRecipes={allRecipes} />}
                 />
                 <Route
-                  path="diary"
-                  exact
-                  element={<FoodDiary allRecipes={allRecipes} />}
-                />
-                <Route
-                  path="recipes"
+                  path={RECIPES}
                   exact
                   element={<AllRecipes allRecipes={allRecipes} />}
                 />
                 <Route
-                  path="blog"
+                  path={PRODUCTS}
+                  exact
+                  element={<ProductsPage />}
+                />
+                <Route
+                  path={BLOG}
                   exact
                   element={<Blog />}
                 />
                 <Route
-                  path="favorites"
+                  path={FAVORITES}
                   exact
                   element={<Favorites allRecipes={allRecipes} />}
                 />
-                <Route path="recipes/:id" element={<RecipePage />} />
+                <Route
+                  path={MEASURING}
+                  exact
+                  element={<Measuring />}
+                />
+                <Route path={RECIPE_PAGE} element={<RecipePage />} />
               </Routes>
             </div>
           </div>
