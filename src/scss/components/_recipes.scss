@@ -27,8 +27,8 @@
   }
   &__btns {
     position: absolute;
-    right: 28px;
-    bottom: 32px;
+    right: 24px;
+    bottom: 28px;
     display: inline-grid;
     grid-template-columns: max-content max-content;
   }
@@ -63,7 +63,7 @@
     line-height: 22px;
   }
   &__img {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 8px;

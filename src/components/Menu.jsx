@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { ADD_DIARY, BLOG, HOME, PRODUCTS, PROFILE, RECIPES } from "../utils/consts";
+import { ADD_DIARY, BLOGS, HOME, PRODUCTS, PROFILE, RECIPES } from "../utils/consts";
 
 const Menu = () => {
   const [isAuth, setIsAuth] = useState(false)
@@ -15,9 +15,6 @@ const Menu = () => {
     setUserName(userNameValue)
   }, [isAuthBooleanValue, userNameValue])
 
-  // const userName = localStorage.getItem("user.name");
-  // const isAuthValue = localStorage.getItem("isAuth");
-  // const isAuth = JSON.parse(isAuthValue);
   let activeClassName = "nav__link--active";
 
   return (
@@ -145,7 +142,7 @@ const Menu = () => {
             </a>
           </li>
           <li className="nav__item">
-            <NavLink to={BLOG} className="nav__link">
+            <NavLink to={BLOGS} className="nav__link">
               {({ isActive }) => (
                 <>
                   <svg

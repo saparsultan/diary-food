@@ -78,6 +78,16 @@
       color: $white-color;
     }
   }
+  &--favorite {
+    background-color: $white-color;
+    box-shadow: 0px 0px 28px rgba(1, 152, 82, 0.4);
+    svg {
+      stroke: $primary-color;
+      &:hover {
+        fill: $primary-color;
+      }
+    }
+  }
   &--upload {
     grid-template-columns: 1fr;
     grid-gap: 8px;

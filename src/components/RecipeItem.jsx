@@ -1,37 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getDatabase, ref, push, update } from "firebase/database";
+import { getDatabase, ref, push, update, set, get } from "firebase/database";
 import calories from "../assets/images/calories.svg";
 import protein from "../assets/images/protein.svg";
 import carb from "../assets/images/carb.svg";
 import fat from "../assets/images/fat.svg";
 import benefit from "../assets/images/benefit.svg";
+import { auth, database } from "../firebase-config";
 
 const RecipeItem = ({
   data,
   date,
   eating,
   recomCalories,
-  isFavorite,
   isDiary,
 }) => {
+
   let initvalue = 0;
-  const sumCalories = data[1].products.reduce(
+  const userId = auth?.currentUser?.uid;
+  const [favorites, setFavorites] = useState([]);
+
+  useEffect(() => {
+    const getFavorites = async () => {
+      const favoritesRef = ref(database, `favorites/${userId}`);
+      const snapshotFavorites = await get(favoritesRef);
+      const dataFavorites = snapshotFavorites.val()
+        ? Object.keys(snapshotFavorites.val())
+        : [];
+      setFavorites(dataFavorites);
+    };
+    function cleanup() {
+      getFavorites();
+    }
+    return cleanup();
+  }, [userId]);
+
+  const isFavorite = favorites.includes(data[0]);
+
+  const sumCalories = data[1]?.products.reduce(
     (acc, current) => acc + +current.calories,
     initvalue
   );
 
-  const sumProteins = data[1].products.reduce(
+  const sumProteins = data[1]?.products.reduce(
     (acc, current) => acc + +current.proteins,
     initvalue
   );
 
-  const sumFats = data[1].products.reduce(
+  const sumFats = data[1]?.products.reduce(
     (acc, current) => acc + +current.fats,
     initvalue
   );
 
-  const sumCarbs = data[1].products.reduce(
+  const sumCarbs = data[1]?.products.reduce(
     (acc, current) => acc + +current.carbs,
     initvalue
   );
@@ -45,9 +66,9 @@ const RecipeItem = ({
     const newFoodDiary = {
       foodName: data[0],
     };
-    const newRecomCalories = {
-      recomCalories: recomCalories,
-    };
+    // const newRecomCalories = {
+    //   recomCalories: recomCalories,
+    // };
     const aaaDiary = ref(
       db,
       `diary/${date?.toString().slice(0, 15)}/recomCalories`
@@ -60,17 +81,27 @@ const RecipeItem = ({
     push(aaaDiary, recomCalories);
   };
 
+  // const handleAddFavorites = (e) => {
+  //   e.preventDefault();
+  //   const isFavorite = {
+  //     isFavorite: !data[1]?.isFavorite
+  //   }
+
+  //   const db = getDatabase();
+  //   const recipes = ref(db, `recipes/${data[0]}`)
+
+  //   update(recipes, isFavorite)
+  // }
+
   const handleAddFavorites = (e) => {
     e.preventDefault();
-    const isFavorite = {
-      isFavorite: !data[1]?.isFavorite
-    }
+    const favoriteRef = ref(database, `favorites/${auth?.currentUser?.uid}/${data[0]}`);
+    set(favoriteRef, {
+      timestamp: new Date().toISOString()
+    })
+  };
 
-    const db = getDatabase();
-    const recipes = ref(db, `recipes/${data[0]}`)
-
-    update(recipes, isFavorite)
-  }
+  // const isFavorite = favorites.includes(item.id);
 
   return (
     <div className="recipe">
@@ -115,7 +146,7 @@ const RecipeItem = ({
       <Link to={`/recipes/${data[0]}`} className="nutri-value__img">
         <img
           src={data[1]?.image}
-          alt={data?.name}
+          alt={data[1]?.name}
           width="322px"
           height="200px"
         />
@@ -140,29 +171,45 @@ const RecipeItem = ({
             <span>В дневник</span>
           </div>
         )}
-        {isFavorite && !data[1].isFavorite ? (
+        {isFavorite ? (
           <div
-            className="btn btn--block"
+            className="btn btn--block btn--favorite"
             onClick={handleAddFavorites}
             style={{ gridTemplateColumns: "1fr", gridGap: "none" }}
           >
             <svg
-              width="20"
-              height="20"
-              style={{ stroke: "none" }}
-              viewBox="0 0 20 20"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path
-                d="M15.7386 19.9996C15.6201 19.9996 15.5008 19.9703 15.3937 19.9103L10.0001 16.9289L4.60741 19.9103C4.36813 20.0439 4.07385 20.0267 3.85029 19.8689C3.62672 19.7111 3.51243 19.4396 3.55672 19.1696L4.59384 12.8097L2.33031 10.5212C2.05318 10.2405 2.05532 9.7884 2.33603 9.51127C2.61674 9.23413 3.06887 9.23627 3.34601 9.51693L5.86525 12.0641C6.02596 12.2269 6.09953 12.4562 6.06239 12.6812L5.20312 17.9489L9.65447 15.4883C9.86947 15.3697 10.1309 15.3697 10.3459 15.4883L14.7972 17.9489L13.9379 12.6812C13.9015 12.4576 13.9737 12.2291 14.1315 12.0676L17.8036 8.30413L12.7615 7.53413C12.5265 7.49773 12.3244 7.347 12.223 7.13127L10.0001 2.39567L7.77733 7.13127C7.67593 7.347 7.4738 7.49773 7.2388 7.53413L0.822487 8.51413C0.433923 8.57553 0.068216 8.30627 0.00821718 7.91553C-0.0510674 7.5256 0.216785 7.16127 0.606777 7.10127L6.64595 6.17917L9.35373 0.410706C9.47087 0.159997 9.723 0 10.0001 0C10.2773 0 10.5295 0.159997 10.6466 0.410706L13.3544 6.17917L19.3935 7.10127C19.6579 7.142 19.8778 7.327 19.9628 7.5806C20.0478 7.83413 19.9835 8.11487 19.7971 8.30627L15.4065 12.8062L16.4443 19.1696C16.4886 19.4396 16.3736 19.7111 16.1507 19.8689C16.0272 19.9553 15.8829 19.9996 15.7386 19.9996Z"
-                fill="white"
-              />
+                <path
+                  d="M11.2366 5.39584L12 6.29803L12.7634 5.39584C13.2203 4.85584 13.7732 4.42965 14.4318 4.11437C15.078 3.80504 15.7635 3.6499 16.5 3.6499C17.8177 3.6499 18.8666 4.08072 19.7179 4.93201C20.5692 5.7833 21 6.83223 21 8.1499C21 9.79374 20.4011 11.3223 19.1263 12.762C17.7379 14.33 16.1571 15.9115 14.3818 17.5059L14.3818 17.5059L14.3762 17.5109L12.6762 19.0609L12.6757 19.0614C12.4757 19.2441 12.2659 19.3249 12 19.3249C11.7341 19.3249 11.5243 19.2441 11.3243 19.0614L9.60009 17.4872C9.60006 17.4871 9.60003 17.4871 9.59999 17.4871C7.85496 15.8902 6.28293 14.3096 4.88254 12.7454C3.60146 11.3145 3 9.79166 3 8.1499C3 6.83223 3.43081 5.7833 4.28211 4.93201C5.1334 4.08072 6.18232 3.6499 7.5 3.6499C8.23653 3.6499 8.92204 3.80504 9.5682 4.11437C10.2268 4.42965 10.7797 4.85584 11.2366 5.39584Z"
+                  strokeWidth="2"
+                />
             </svg>
           </div>
-        ) : <div className="btn btn--favorites" onClick={handleAddFavorites}>
-          efefef
-        </div> }
+        ) : (
+          <div
+            className="btn btn--block btn--favorite"
+            onClick={handleAddFavorites}
+            style={{ gridTemplateColumns: "1fr", gridGap: "none" }}
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                  d="M11.2366 5.39584L12 6.29803L12.7634 5.39584C13.2203 4.85584 13.7732 4.42965 14.4318 4.11437C15.078 3.80504 15.7635 3.6499 16.5 3.6499C17.8177 3.6499 18.8666 4.08072 19.7179 4.93201C20.5692 5.7833 21 6.83223 21 8.1499C21 9.79374 20.4011 11.3223 19.1263 12.762C17.7379 14.33 16.1571 15.9115 14.3818 17.5059L14.3818 17.5059L14.3762 17.5109L12.6762 19.0609L12.6757 19.0614C12.4757 19.2441 12.2659 19.3249 12 19.3249C11.7341 19.3249 11.5243 19.2441 11.3243 19.0614L9.60009 17.4872C9.60006 17.4871 9.60003 17.4871 9.59999 17.4871C7.85496 15.8902 6.28293 14.3096 4.88254 12.7454C3.60146 11.3145 3 9.79166 3 8.1499C3 6.83223 3.43081 5.7833 4.28211 4.93201C5.1334 4.08072 6.18232 3.6499 7.5 3.6499C8.23653 3.6499 8.92204 3.80504 9.5682 4.11437C10.2268 4.42965 10.7797 4.85584 11.2366 5.39584Z"
+                  strokeWidth="2"
+                />
+            </svg>
+          </div>
+        )}
       </div>
     </div>
   );

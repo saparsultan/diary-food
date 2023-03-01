@@ -97,7 +97,7 @@ const AllRecipes = ({ allRecipes }) => {
 
       <div className="recipe-grid">
         {list.map((data, index) => (
-          <RecipeItem key={data[0] + index} data={data} isFavorite />
+          <RecipeItem key={data[0] + index} data={data} />
         ))}
       </div>
 

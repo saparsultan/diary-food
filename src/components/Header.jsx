@@ -9,7 +9,7 @@ import {
   ADD_DIARY,
   LOGIN,
   REGISTRATION,
-  BLOG,
+  BLOGS,
 } from "../utils/consts";
 
 const Header = () => {
@@ -34,7 +34,7 @@ const Header = () => {
                     return "Все рецепты";
                   case FAVORITES:
                     return "Избранное";
-                  case BLOG:
+                  case BLOGS:
                     return "Статьи";
                   case ADD_DIARY:
                     return "Добавить в дневник";

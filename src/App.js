@@ -16,11 +16,11 @@ import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import { auth } from "./firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
-import Blog from "./pages/Blog";
+import AllBlogs from "./pages/AllBlogs";
 import Profile from "./pages/Profile";
 import ProductsPage from "./pages/ProductsPage";
 import CreateBlog from "./pages/CreateBlog";
-import { ADD_DIARY, BLOG, CREATE_BLOG, CREATE_RECIPE, FAVORITES, HOME, LOGIN, MEASURING, PRODUCTS, PROFILE, RECIPES, RECIPE_PAGE, REGISTRATION } from "./utils/consts";
+import { ADD_DIARY, BLOGS, CREATE_BLOG, CREATE_RECIPE, FAVORITES, HOME, LOGIN, MEASURING, PRODUCTS, PROFILE, RECIPES, RECIPE_PAGE, REGISTRATION } from "./utils/consts";
 import Measuring from "./pages/Measuring";
 
 function App() {
@@ -122,14 +122,14 @@ function App() {
                   element={<ProductsPage />}
                 />
                 <Route
-                  path={BLOG}
+                  path={BLOGS}
                   exact
-                  element={<Blog />}
+                  element={<AllBlogs />}
                 />
                 <Route
                   path={FAVORITES}
                   exact
-                  element={<Favorites allRecipes={allRecipes} />}
+                  element={<Favorites />}
                 />
                 <Route
                   path={MEASURING}
