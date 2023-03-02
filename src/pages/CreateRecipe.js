@@ -2,17 +2,18 @@ import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
-import { ref as refDatabase, set, onValue } from "firebase/database";
-import { storage, database } from "../firebase-config";
+import { ref as refDatabase, set, onValue, serverTimestamp } from "firebase/database";
+import { storage, database, auth } from "../firebase-config";
 import recipeUses from "../data/recipeUses";
 import categoriesDishes from "../data/categoriesDishes";
+import EmptyCreate from "../components/EmptyCreate";
 
-const CreateRecipe = (props) => {
+const CreateRecipe = ({isAuth}) => {
   const [allProducts, setAllProducts] = React.useState([]);
-  const [newName, setNewName] = React.useState(null);
+  const [newName, setNewName] = React.useState("");
   const [category, setCategory] = React.useState("Все тиы блюд");
   const [recipeUsesValue, setRecipeUsesValue] = React.useState([]);
-  const [newDescription, setNewDescription] = React.useState(null);
+  const [newDescription, setNewDescription] = React.useState("");
   const [imageUpload, setImageUpload] = React.useState();
   const [selectProduct, setSelectProduct] = React.useState([]);
   const [amountWeight, setAmountWeight] = React.useState(0);
@@ -57,7 +58,6 @@ const CreateRecipe = (props) => {
     );
   });
 
-  console.log("uniqueProducts", selectProduct)
 
   const optionCategoriesDishes = categoriesDishes.map((category, id) => {
     return (
@@ -102,10 +102,13 @@ const CreateRecipe = (props) => {
     setImageUpload();
   };
 
+  console.log("auth", auth?.currentUser )
+  console.log("newName", newName)
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-    if(newName !== null && recipeProduct.length > 0 && newDescription !== null && imageUpload) {
+    if(isAuth && newName !== "" && recipeProduct.length > 0 && newDescription !== "" && imageUpload) {
       await uploadBytesResumable(imageRef, imageUpload).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) =>
         set(refDatabase(database, "recipes/" + v4()), {
@@ -119,7 +122,12 @@ const CreateRecipe = (props) => {
           isEggs: recipeUsesValue[2].check,
           isPig: recipeUsesValue[3].check,
           isFish: recipeUsesValue[4].check,
-          isAlcohol: recipeUsesValue[5].check
+          isAlcohol: recipeUsesValue[5].check,
+          author: {
+            uid: auth?.currentUser?.uid,
+            name: auth?.currentUser?.displayName,
+          },
+          createdAt: serverTimestamp()
         })
         );
       });
@@ -128,7 +136,9 @@ const CreateRecipe = (props) => {
 
   return (
     <>
-      <Tabs>
+    {
+      isAuth ? <>
+            <Tabs>
         <TabList>
           <Tab>Состав</Tab>
           <Tab>Описание</Tab>
@@ -327,6 +337,8 @@ const CreateRecipe = (props) => {
           Сохранить
         </button>
       </div>
+      </> : <EmptyCreate/>
+    }
     </>
   );
 };

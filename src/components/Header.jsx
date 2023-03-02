@@ -10,6 +10,8 @@ import {
   LOGIN,
   REGISTRATION,
   BLOGS,
+  MEASURING,
+  PRODUCTS,
 } from "../utils/consts";
 
 const Header = () => {
@@ -38,6 +40,10 @@ const Header = () => {
                     return "Статьи";
                   case ADD_DIARY:
                     return "Добавить в дневник";
+                  case MEASURING:
+                    return "Вес и измерения";
+                  case PRODUCTS:
+                    return "Все продукты";
                   case LOGIN:
                     return "Авторизация";
                   case REGISTRATION:

@@ -1,0 +1,25 @@
+@import '../variables';
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  padding-top: 4px;
+  &__container {
+    background-color: $white-color;
+  }
+  &-list {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    grid-gap: 16px;
+    padding: 0 44px;
+    align-items: center;
+    li {
+      a {
+        font-size: 14px;
+        color: $black64;
+      }
+    }
+  }
+}

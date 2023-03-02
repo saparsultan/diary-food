@@ -22,6 +22,7 @@ import ProductsPage from "./pages/ProductsPage";
 import CreateBlog from "./pages/CreateBlog";
 import { ADD_DIARY, BLOGS, CREATE_BLOG, CREATE_RECIPE, FAVORITES, HOME, LOGIN, MEASURING, PRODUCTS, PROFILE, RECIPES, RECIPE_PAGE, REGISTRATION } from "./utils/consts";
 import Measuring from "./pages/Measuring";
+import Footer from "./components/Footer";
 
 function App() {
   const isAuthValue = localStorage.getItem("isAuth");
@@ -43,13 +44,14 @@ function App() {
         localStorage.setItem("user.creation", user?.metadata?.creationTime);
         console.log("user", user)
       } else {
+        localStorage.setItem("isAuth", Boolean(false));
         return;
       }
     });
     return () => unsubscribe();
   }, []);
 
-  let limitNumber = 4;
+  let limitNumber = 5;
 
   useEffect(() => {
     const db = getDatabase();
@@ -95,11 +97,11 @@ function App() {
                   exact
                   element={<Home allRecipes={allRecipes} />}
                 />
-                <Route path={CREATE_RECIPE} exact element={<CreateRecipe />} />
+                <Route path={CREATE_RECIPE} exact element={<CreateRecipe isAuth={isAuth} />} />
                 <Route
                   path="create-product"
                   exact
-                  element={<CreateProduct />}
+                  element={<CreateProduct isAuth={isAuth} />}
                 />
                 <Route
                   path={CREATE_BLOG}
@@ -142,6 +144,7 @@ function App() {
           </div>
         </div>
       </main>
+      <Footer/>
     </div>
   );
 }

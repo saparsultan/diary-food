@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getDatabase, ref, push, update, set, get } from "firebase/database";
+import { getDatabase, ref, push, update, set, get, remove } from "firebase/database";
 import calories from "../assets/images/calories.svg";
 import protein from "../assets/images/protein.svg";
 import carb from "../assets/images/carb.svg";
@@ -14,11 +14,13 @@ const RecipeItem = ({
   eating,
   recomCalories,
   isDiary,
+  handleCheckClick
 }) => {
 
   let initvalue = 0;
   const userId = auth?.currentUser?.uid;
   const [favorites, setFavorites] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(favorites?.includes(data[0]));
 
   useEffect(() => {
     const getFavorites = async () => {
@@ -33,9 +35,14 @@ const RecipeItem = ({
       getFavorites();
     }
     return cleanup();
-  }, [userId]);
+  }, [userId, isFavorite]);
 
-  const isFavorite = favorites.includes(data[0]);
+  useEffect(() => {
+    let updateFavorite = favorites?.includes(data[0]);
+    setIsFavorite(updateFavorite)
+  }, [isFavorite, favorites, data]);
+
+  // console.log("isFavorite", isFavorite)
 
   const sumCalories = data[1]?.products.reduce(
     (acc, current) => acc + +current.calories,
@@ -93,12 +100,22 @@ const RecipeItem = ({
   //   update(recipes, isFavorite)
   // }
 
-  const handleAddFavorites = (e) => {
+  const handleAddFavorites = async (e) => {
     e.preventDefault();
     const favoriteRef = ref(database, `favorites/${auth?.currentUser?.uid}/${data[0]}`);
-    set(favoriteRef, {
+    await set(favoriteRef, {
       timestamp: new Date().toISOString()
     })
+    setIsFavorite(true)
+    localStorage.setItem("checkItem", !isFavorite);
+  };
+
+  const handleRemoveFavorites = async (e) => {
+    e.preventDefault();
+    const favoriteRef = ref(database, `favorites/${auth?.currentUser?.uid}/${data[0]}`);
+    await remove(favoriteRef);
+    setIsFavorite(false);
+    localStorage.setItem("checkItem", !isFavorite);
   };
 
   // const isFavorite = favorites.includes(item.id);
@@ -143,7 +160,7 @@ const RecipeItem = ({
           <span className="nutri-value__name">Польза</span>
         </div>
       </div>
-      <Link to={`/recipes/${data[0]}`} className="nutri-value__img">
+      <Link to={`/recipes/${data[0]}`} className="nutri-value__img" state={{ isFavorite: isFavorite }}>
         <img
           src={data[1]?.image}
           alt={data[1]?.name}
@@ -171,17 +188,17 @@ const RecipeItem = ({
             <span>В дневник</span>
           </div>
         )}
-        {isFavorite ? (
+        {isFavorite === true ? (
           <div
             className="btn btn--block btn--favorite"
-            onClick={handleAddFavorites}
+            onClick={(e) => {handleRemoveFavorites(e); handleCheckClick && handleCheckClick()}}
             style={{ gridTemplateColumns: "1fr", gridGap: "none" }}
           >
             <svg
               width="24"
               height="24"
               viewBox="0 0 24 24"
-              fill="none"
+              fill="#019852"
               xmlns="http://www.w3.org/2000/svg"
             >
                 <path

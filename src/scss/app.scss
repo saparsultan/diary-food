@@ -16,15 +16,19 @@ body {
 }
 
 .app {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   grid-gap: 16px;
+  height: 100vh;
 }
 
 .main {
   display: grid;
   grid-template-columns: 200px 1fr;
   grid-gap: 16px;
+  &__container {
+    margin-bottom: auto;
+  }
 }
 
 .df {
@@ -43,10 +47,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.footer {
-  padding-top: 8px;
 }
 
 .content {
@@ -172,15 +172,15 @@ body {
 
 .products {
   &-list {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
   &-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 12px 0;
-    &:not(last-child) {
+    &:not(:last-child) {
       border-bottom: 1px solid $background-color;
     }
   }

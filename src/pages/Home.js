@@ -3,7 +3,7 @@ import { getDatabase, ref, onValue } from "firebase/database";
 import SelectDate from "../components/SelectDate";
 import SelectEating from "../components/SelectEating";
 import RecipeItem from "../components/RecipeItem";
-import EmptyDiary from "../components/EmptyDiary";
+import EmptyAdd from "../components/EmptyAdd";
 
 const Home = ({ allRecipes }) => {
   const [startDate, setStartDate] = useState(new Date());
@@ -133,7 +133,7 @@ const Home = ({ allRecipes }) => {
           </div>
         </>
       ) : (
-        <EmptyDiary />
+        <EmptyAdd eating={eating} />
       )}
     </>
   );

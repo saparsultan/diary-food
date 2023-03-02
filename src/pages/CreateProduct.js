@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { database } from "../firebase-config";
 import { ref, set } from "firebase/database";
 import { v4 } from "uuid";
+import EmptyCreate from "../components/EmptyCreate";
 
-const CreateProduct = () => {
-  const [newName, setNewName] = React.useState("");
-  const [newWeight, setNewWeight] = React.useState(100);
-  const [newCalories, setNewCalories] = React.useState(0);
-  const [newProteins, setNewProteins] = React.useState(0);
-  const [newFats, setNewFats] = React.useState(0);
-  const [newCarbs, setNewCarbs] = React.useState(0);
-  const [selectUnit, setSelectUnit] = React.useState("г(мл)");
+const CreateProduct = ({isAuth}) => {
+  const [newName, setNewName] = useState("");
+  const [newWeight, setNewWeight] = useState(100);
+  const [newCalories, setNewCalories] = useState(0);
+  const [newProteins, setNewProteins] = useState(0);
+  const [newFats, setNewFats] = useState(0);
+  const [newCarbs, setNewCarbs] = useState(0);
+  const [selectUnit, setSelectUnit] = useState("г(мл)");
 
   const handleChange = (e) => {
     setSelectUnit(e.target.value);
@@ -29,15 +30,11 @@ const CreateProduct = () => {
     });
   };
 
-  console.log("selectUnit", selectUnit);
-  console.log("newWeight", newWeight);
-  console.log("newCalories", newCalories);
-  console.log("newProteins", newProteins);
-  console.log("ddes", newName);
-
   return (
     <>
-      <div className="form-block">
+    {
+      isAuth ? <>
+            <div className="form-block">
         <div className="form-item">
           <label className="form-item__label">Название:</label>
           <input
@@ -95,7 +92,6 @@ const CreateProduct = () => {
           />
         </div>
       </div>
-
       <div className="form-block">
         <div className="form-item form-item--row">
           <label className="form-item__label">Калорийность:</label>
@@ -143,6 +139,8 @@ const CreateProduct = () => {
           Добавить
         </button>
       </div>
+      </> : <EmptyCreate />
+    }
     </>
   );
 };

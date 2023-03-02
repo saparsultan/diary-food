@@ -1,0 +1,17 @@
+.error {
+  &-auth {
+    display: inline-flex;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: $white-color;
+    background-color: #f57474;
+    border-radius: 4px;
+  }
+  &-reg {
+    display: inline-flex;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #f57474;
+  }
+}

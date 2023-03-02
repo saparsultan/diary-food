@@ -8,22 +8,30 @@ import {
 import { auth } from "../firebase-config";
 import { Link } from "react-router-dom";
 import { HOME, LOGIN } from "../utils/consts";
+import ErrorMessage from "./ErrorMessage";
 
 const Login = ({ type }) => {
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorCheck, setErrorCheck] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
 
   const handleAuthorization = async (e) => {
     e.preventDefault();
-
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate(`${HOME}`);
       window.location.reload();
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
+      setErrorCheck(true);
+      if (error.message === "Firebase: Error (auth/user-not-found).") {
+        setErrorMessage("Неверный логин или пароль.");
+      }
     }
   };
 
@@ -38,9 +46,18 @@ const Login = ({ type }) => {
       await updateProfile(user, { displayName });
       navigate(`${LOGIN}`);
       window.location.reload();
-      console.log(user);
     } catch (error) {
-      console.log(error.message);
+      setErrorCheck(true);
+      console.error(error.message);
+      if (
+        error.message ===
+        "Firebase: Password should be at least 6 characters (auth/weak-password)."
+      ) {
+        setErrorPassword("Пароль должен быть не менее 6 символов");
+      }
+      if (error.message === "Firebase: Error (auth/email-already-in-use).") {
+        setErrorEmail("Этот электронный адрес уже занят");
+      }
     }
   };
 
@@ -55,16 +72,19 @@ const Login = ({ type }) => {
         }
         className="login"
       >
-        <div className="login__item">
-          <label>Имя:</label>
-          <input
-            type="text"
-            required
-            placeholder="Введите ваше имя"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-          />
-        </div>
+        {type === "registration" && (
+          <div className="login__item">
+            <label>Имя:</label>
+            <input
+              type="text"
+              required
+              placeholder="Введите ваше имя"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+            />
+          </div>
+        )}
+        {errorMessage && <ErrorMessage message={errorMessage} type="auth" />}
         <div className="login__item">
           <label>Email:</label>
           <input
@@ -75,8 +95,9 @@ const Login = ({ type }) => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
+        {errorEmail && <ErrorMessage message={errorEmail} />}
         <div className="login__item">
-          <label>Password:</label>
+          <label>Пароль:</label>
           <input
             type="password"
             required
@@ -85,8 +106,9 @@ const Login = ({ type }) => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+        {errorPassword && <ErrorMessage message={errorPassword} />}
         <button type="submit" className="login__btn">
-          Войти
+          {type === "authorization" ? "Войти" : "Создать аккаунт"}
         </button>
         <div className="login__link">
           {type === "authorization" ? (

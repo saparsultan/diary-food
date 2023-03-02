@@ -29,6 +29,7 @@ const Profile = () => {
     localStorage.removeItem("user.email");
     localStorage.removeItem("user.creation");
     navigate("/login");
+    window.location.reload();
   };
 
   return (

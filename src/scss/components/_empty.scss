@@ -2,6 +2,7 @@
 
 .empty {
   &-diary {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,11 +13,35 @@
     height: 454px;
 
     &__text {
+      max-width: 350px;
       font-size: 20px;
-      line-height: 110%;
+      line-height: 1.2;
+      text-align: center;
       color: $black40;
       margin-top: 8px;
       margin-bottom: 32px;
+    }
+
+    &__auth {
+      position: absolute;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      svg {
+        width: 22px;
+        height: 22px;
+        margin-right: 6px;
+      }
+      span {
+        display: inline-flex;
+        font-size: 14px;
+        text-align: center;
+        color: $black64;
+      }
     }
 
     &__btn {
