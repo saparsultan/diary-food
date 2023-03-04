@@ -68,37 +68,25 @@ const RecipeItem = ({
 
   const handleAddDiary = (e) => {
     e.preventDefault();
-
-    const db = getDatabase();
-    const newFoodDiary = {
-      foodName: data[0],
-    };
-    // const newRecomCalories = {
-    //   recomCalories: recomCalories,
-    // };
-    const aaaDiary = ref(
-      db,
-      `diary/${date?.toString().slice(0, 15)}/recomCalories`
-    );
-    const foodDiary = ref(
-      db,
-      `diary/${date?.toString().slice(0, 15)}/${eating}`
-    );
-    push(foodDiary, newFoodDiary);
-    push(aaaDiary, recomCalories);
+    if(auth) {
+      const newFoodDiary = {
+        foodName: data[0],
+      };
+      const recomCaloriesRef = ref(
+        database,
+        `diary/${auth?.currentUser?.uid}/${date?.toString().slice(0, 15)}/recomCalories`
+      );
+      const eatingRef = ref(
+        database,
+        `diary/${auth?.currentUser?.uid}/${date?.toString().slice(0, 15)}/${eating}`
+      );
+      set(eatingRef, newFoodDiary);
+      set(recomCaloriesRef, +recomCalories);
+    } else {
+      return
+    }
   };
 
-  // const handleAddFavorites = (e) => {
-  //   e.preventDefault();
-  //   const isFavorite = {
-  //     isFavorite: !data[1]?.isFavorite
-  //   }
-
-  //   const db = getDatabase();
-  //   const recipes = ref(db, `recipes/${data[0]}`)
-
-  //   update(recipes, isFavorite)
-  // }
 
   const handleAddFavorites = async (e) => {
     e.preventDefault();
@@ -107,7 +95,6 @@ const RecipeItem = ({
       timestamp: new Date().toISOString()
     })
     setIsFavorite(true)
-    localStorage.setItem("checkItem", !isFavorite);
   };
 
   const handleRemoveFavorites = async (e) => {
@@ -115,10 +102,8 @@ const RecipeItem = ({
     const favoriteRef = ref(database, `favorites/${auth?.currentUser?.uid}/${data[0]}`);
     await remove(favoriteRef);
     setIsFavorite(false);
-    localStorage.setItem("checkItem", !isFavorite);
   };
 
-  // const isFavorite = favorites.includes(item.id);
 
   return (
     <div className="recipe">
@@ -170,7 +155,7 @@ const RecipeItem = ({
       </Link>
       <div className="recipe__btns">
         {isDiary && (
-          <div className="btn btn--block" onClick={handleAddDiary}>
+          <div className="btn btn--block btn--favorite" onClick={handleAddDiary}>
             <svg
               width="20"
               height="20"
@@ -188,7 +173,7 @@ const RecipeItem = ({
             <span>В дневник</span>
           </div>
         )}
-        {isFavorite === true ? (
+        {!isDiary && isFavorite === true ? (
           <div
             className="btn btn--block btn--favorite"
             onClick={(e) => {handleRemoveFavorites(e); handleCheckClick && handleCheckClick()}}
@@ -207,7 +192,7 @@ const RecipeItem = ({
                 />
             </svg>
           </div>
-        ) : (
+        ) : !isDiary && (
           <div
             className="btn btn--block btn--favorite"
             onClick={handleAddFavorites}

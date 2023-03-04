@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { getDatabase, ref, push, update, onValue } from "firebase/database";
+import { getDatabase, ref, push, update, onValue, remove, set } from "firebase/database";
+import { format } from "date-fns";
 import calories from "../assets/images/calories.svg";
 import protein from "../assets/images/protein.svg";
 import carb from "../assets/images/carb.svg";
 import fat from "../assets/images/fat.svg";
 import benefit from "../assets/images/benefit.svg";
-import { database } from "../firebase-config";
+import { auth, database } from "../firebase-config";
 import ProductItem from "./ProductItem";
 
 const RecipeCard = ({ idRecipe }) => {
   const location = useLocation();
   const { isFavorite } = location.state;
+  const [isFavoriteState, setIsFavoriteState] = useState(isFavorite);
   console.log("isFavorite", isFavorite);
 
   const [item, setItem] = useState({});
@@ -95,19 +97,36 @@ const RecipeCard = ({ idRecipe }) => {
   //   setSumBenefit(sumBenefit)
   // }
 
+  const handleAddFavorites = async (e) => {
+    e.preventDefault();
+    const favoriteRef = ref(database, `favorites/${auth?.currentUser?.uid}/${idRecipe}`);
+    await set(favoriteRef, {
+      timestamp: new Date().toISOString()
+    })
+    setIsFavoriteState(true)
+  };
+
+  const handleRemoveFavorites = async (e) => {
+    e.preventDefault();
+    const favoriteRef = ref(database, `favorites/${auth?.currentUser?.uid}/${idRecipe}`);
+    await remove(favoriteRef);
+    setIsFavoriteState(false)
+    console.log("ssssssssssssssssss")
+  };
+
   return (
     <div className="card__container">
       <div className="card">
         <div className="card-header">
           <div className="author">
-            <div className="author__avatar"></div>
+            <div className="author__avatar">{item?.author?.name[0].toUpperCase()}</div>
             <div className="author__text">
-              <div className="author__name">Айгерим</div>
-              <div className="author__date">26.01.2023</div>
+              <div className="author__name">{item?.author?.name}</div>
+              <div className="author__date">{item?.author?.createdAt && format(new Date(item?.author?.createdAt), "dd.MM.yyyy")}</div>
             </div>
           </div>
-          {isFavorite ? (
-            <div className="favorite-btn">
+          {isFavoriteState ? (
+            <div className="favorite-btn" onClick={handleRemoveFavorites}>
               <svg
                 width="32"
                 height="32"
@@ -123,7 +142,7 @@ const RecipeCard = ({ idRecipe }) => {
               </svg>
             </div>
           ) : (
-            <div className="favorite-btn">
+            <div className="favorite-btn" onClick={handleAddFavorites}>
               <svg
                 width="32"
                 height="32"

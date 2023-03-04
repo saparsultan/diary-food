@@ -15,4 +15,5 @@ export const PRODUCTS = "/products";
 export const BLOGS = "/blogs";
 export const BLOG__PAGE = "/blogs/:id";
 export const FAVORITES = "/favorites";
+export const ADD_MEASURING = "/add-measuring";
 export const MEASURING = "/measuring";

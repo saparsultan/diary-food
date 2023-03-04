@@ -14,6 +14,7 @@ const CreateRecipe = ({isAuth}) => {
   const [category, setCategory] = React.useState("Все тиы блюд");
   const [recipeUsesValue, setRecipeUsesValue] = React.useState([]);
   const [newDescription, setNewDescription] = React.useState("");
+  const [newMethods, setNewMethods] = React.useState("");
   const [imageUpload, setImageUpload] = React.useState();
   const [selectProduct, setSelectProduct] = React.useState([]);
   const [amountWeight, setAmountWeight] = React.useState(0);
@@ -102,13 +103,11 @@ const CreateRecipe = ({isAuth}) => {
     setImageUpload();
   };
 
-  console.log("auth", auth?.currentUser )
-  console.log("newName", newName)
 
   const onSubmit = async (e) => {
     e.preventDefault();
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-    if(isAuth && newName !== "" && recipeProduct.length > 0 && newDescription !== "" && imageUpload) {
+    if(isAuth && newName !== "" && recipeProduct.length > 0 && newDescription !== "" && newMethods !== "" && imageUpload) {
       await uploadBytesResumable(imageRef, imageUpload).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) =>
         set(refDatabase(database, "recipes/" + v4()), {
@@ -277,6 +276,18 @@ const CreateRecipe = ({isAuth}) => {
               />
             </div>
             <div className="form-item">
+              <label className="form-item__label">Метод приготовления:</label>
+              <textarea
+                type="text"
+                value={newMethods}
+                name="methods"
+                required
+                className="form-item__input"
+                placeholder="Опишите метод приготовления"
+                onChange={(e) => setNewMethods(e.target.value)}
+              />
+            </div>
+            <div className="form-item">
               <label className="form-item__label">Основная фотография:</label>
               <div className="form-item__img-block">
                 {imageUpload === undefined && (
@@ -332,9 +343,9 @@ const CreateRecipe = ({isAuth}) => {
         </TabPanel>
       </Tabs>
 
-      <div className="footer">
-        <button className="btn" onClick={onSubmit}>
-          Сохранить
+      <div className="form-footer">
+        <button className="btn btn--one" onClick={onSubmit}>
+          Создать
         </button>
       </div>
       </> : <EmptyCreate/>

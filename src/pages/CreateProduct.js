@@ -134,9 +134,9 @@ const CreateProduct = ({isAuth}) => {
           />
         </div>
       </div>
-      <div className="footer">
-        <button className="btn" style={{ gridGap: 0 }} onClick={createProducts}>
-          Добавить
+      <div className="form-footer">
+        <button className="btn btn--one" style={{ gridGap: 0 }} onClick={createProducts}>
+          Создать
         </button>
       </div>
       </> : <EmptyCreate />

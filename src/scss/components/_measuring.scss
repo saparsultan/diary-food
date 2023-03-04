@@ -1,0 +1,67 @@
+.measuring {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  padding: 16px;
+  background-color: $white-color;
+  border-radius: 24px;
+  &-grid {
+    display: grid;
+    grid-template-columns: 50px 1fr 100px 1fr;
+    grid-gap: 16px;
+    padding: 16px;
+    background-color: $background-color;
+    border-radius: 16px;
+    &--3fr {
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 20px;
+    }
+    &__col {
+      &-3 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.grid-col {
+  &__title {
+    font-weight: 500;
+  }
+  &__1 {
+    display: flex;
+    align-items: center;
+    color: $black72;
+  }
+  &__3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $black40;
+  }
+  &__input {
+    position: relative;
+    &-kg {
+      &::after {
+        content: 'кг';
+      }
+    }
+    &-cm {
+      &::after {
+        content: 'см';
+      }
+    }
+    &::after {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 40px;
+      line-height: 1.2;
+      color: $black40;
+    }
+  }
+}

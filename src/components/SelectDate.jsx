@@ -4,7 +4,8 @@ import ru from "date-fns/locale/ru";
 import "react-datepicker/dist/react-datepicker.css";
 registerLocale("ru", ru);
 
-const SelectDate = ({ selected, handleSelectDate }) => {
+const SelectDate = ({ selected, handleSelectDate, styleTitle }) => {
+
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <button className="custom-input" onClick={onClick} ref={ref}>
       <span>
@@ -40,7 +41,7 @@ const SelectDate = ({ selected, handleSelectDate }) => {
 
   return (
     <div className="form-item">
-      <label className="form-item__label" style={{marginBottom: "4px"}}>Выберите дату</label>
+      <label className="form-item__label" style={styleTitle ? {marginBottom: "4px", textAlign: "center"} : {marginBottom: "4px"}}>Выберите дату</label>
       <DatePicker
         selected={selected}
         onChange={(date) => handleSelectDate(date)}

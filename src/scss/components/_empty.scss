@@ -30,6 +30,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 100%;
       margin-top: 20px;
       svg {
         width: 22px;
@@ -51,5 +52,8 @@
       padding-left: 16px;
       padding-right: 16px;
     }
+  }
+  &-measuring {
+    margin-top: 16px;
   }
 }
