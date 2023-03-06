@@ -17,6 +17,10 @@ import {
 
 const Header = () => {
   let { pathname } = useLocation();
+  const pathnameCopy = pathname;
+  const parts = pathname.split("/");
+  const pathnameSplit = parts[1];
+
   const isAuth = localStorage.getItem("isAuth");
   return (
     <header className="header__container">
@@ -51,6 +55,14 @@ const Header = () => {
                     return "Авторизация";
                   case REGISTRATION:
                     return "Регистрация";
+                  case pathnameCopy:
+                    if (pathnameSplit === "blogs") {
+                      return "Статьи";
+                    } else if (pathnameSplit === "recipes") {
+                      return "Все рецепты";
+                    } else {
+                      return "Дневник питания";
+                    }
                   default:
                     return "Дневник питания";
                 }

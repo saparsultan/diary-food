@@ -7,6 +7,7 @@ import { RECIPES } from "../utils/consts";
 import Search from "../components/Search";
 import CategoryFilter from "../components/CategoryFilter";
 import RecipeUsesFilter from "../components/RecipUsesFilter";
+import ItemLoader from "../components/ItemLoader";
 
 const AllRecipes = ({ allRecipes }) => {
   let { pathname } = useLocation();
@@ -96,9 +97,11 @@ const AllRecipes = ({ allRecipes }) => {
       <Search query={query} handleQuery={handleQuery}/>
 
       <div className="recipe-grid">
-        {list.map((data, index) => (
+        {allRecipes.length > 0 ? list.map((data, index) => (
           <RecipeItem key={data[0] + index} data={data} />
-        ))}
+        )) : Array(4)
+        .fill(0)
+        .map((_, index) => <ItemLoader key={index} title="Загрузка..." />)}
       </div>
 
       {pathname === RECIPES ? (

@@ -84,6 +84,8 @@
   &--favorite {
     background-color: $white-color;
     box-shadow: 0px 0px 28px rgba(1, 152, 82, 0.4);
+    opacity: 1;
+    transition: opacity .2 ease-out;
     span {
       font-weight: 600;
       color: $primary-color;
@@ -93,6 +95,10 @@
       &:hover {
         fill: $primary-color;
       }
+    }
+    &:hover {
+      opacity: .8;
+      transition: opacity .2 ease-out;
     }
   }
   &--upload {

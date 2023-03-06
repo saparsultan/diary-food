@@ -20,6 +20,7 @@ const CreateRecipe = ({isAuth}) => {
   const [amountWeight, setAmountWeight] = React.useState(0);
   const [recipeProduct, setRecipeProduct] = React.useState([]);
 
+  console.log("recipeProduct", recipeProduct)
   React.useEffect(() => {
     const productsRef = refDatabase(database, "products");
     const unregisterFunction = onValue(productsRef, (snapshot) => {

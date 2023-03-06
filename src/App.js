@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
+import { FallingLines } from  'react-loader-spinner'
 import { Routes, Route } from "react-router-dom";
 import {
   getDatabase,
@@ -9,11 +10,10 @@ import {
 } from "firebase/database";
 import Header from "./components/Header";
 import Menu from "./components/Menu";
-import Home from "./pages/Home";
+// import Home from "./pages/Home";
 import CreateProduct from "./pages/CreateProduct";
 import CreateRecipe from "./pages/CreateRecipe";
 import FoodDiary from "./pages/FoodDiary";
-import AllRecipes from "./pages/AllRecipes";
 import Favorites from "./pages/Favorites";
 import RecipePage from "./pages/RecipePage";
 import "react-tabs/style/react-tabs.scss";
@@ -30,6 +30,7 @@ import {
   ADD_DIARY,
   ADD_MEASURING,
   BLOGS,
+  BLOG_PAGE,
   CREATE_BLOG,
   CREATE_RECIPE,
   FAVORITES,
@@ -45,6 +46,9 @@ import {
 import Measuring from "./pages/Measuring";
 import Footer from "./components/Footer";
 import AddMeasuring from "./pages/AddMeasuring";
+import BlogPage from "./pages/BlogPage";
+const Home = lazy(() => import('./pages/Home'));
+const AllRecipes = lazy(() => import('./pages/AllRecipes'));
 
 function App() {
   const isAuthValue = localStorage.getItem("isAuth");
@@ -104,7 +108,15 @@ function App() {
           <div className="main">
             <Menu />
             <div className="content">
-              <Routes>
+            <Suspense fallback={<div>
+              <FallingLines
+  color="#4fa94d"
+  width="100"
+  visible={true}
+  ariaLabel='falling-lines-loading'
+/>
+            </div> }>
+            <Routes>
                 <Route path={LOGIN} exact element={<LoginPage />} />
                 {isAuth && (
                   <>
@@ -149,10 +161,12 @@ function App() {
                 />
                 <Route path={PRODUCTS} exact element={<ProductsPage />} />
                 <Route path={BLOGS} exact element={<AllBlogs />} />
+                <Route path={BLOG_PAGE} exact element={<BlogPage />} />
                 <Route path={FAVORITES} exact element={<Favorites />} />
                 <Route path={MEASURING} exact element={<Measuring />} />
                 <Route path={RECIPE_PAGE} element={<RecipePage />} />
               </Routes>
+            </Suspense>
             </div>
           </div>
         </div>

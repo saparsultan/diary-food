@@ -16,6 +16,11 @@
       margin-bottom: 16px;
       font-size: 24px;
       font-weight: 500;
+      transition: color 0.15s ease-out;
+      &:hover {
+        color: $primary-color;
+        transition: color 0.15s ease-out;
+      }
     } 
     &__img {
       display: flex;
