@@ -38,7 +38,7 @@ const CreateProduct = ({ isAuth }) => {
   };
 
   const createProducts = async () => {
-    if(auth) {
+    if(auth.currentUser && newName !== "" && newCalories >= 0 && newProteins >= 0 && newFats >= 0 && newCarbs >=0) {
       await set(ref(database, "products/" + v4()), {
         id: v4(),
         name: newName,
@@ -125,8 +125,9 @@ const CreateProduct = ({ isAuth }) => {
               <label className="form-item__label">Калорийность:</label>
               <input
                 type="text"
+                required
                 value={newCalories}
-                className="form-item__input"
+                className="form-item__input grid-col__input grid-col__input-kcal"
                 placeholder="ккал"
                 onChange={(e) => setNewCalories(e.target.value)}
               />

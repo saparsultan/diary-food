@@ -1,7 +1,7 @@
 import React from "react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { ref as refDatabase, set, onValue, serverTimestamp } from "firebase/database";
-import { database, storage } from "../firebase-config";
+import { ref as refDatabase, set, onValue, serverTimestamp, push } from "firebase/database";
+import { auth, database, storage } from "../firebase-config";
 import { v4 } from "uuid";
 import firebase from 'firebase/compat/app';
 
@@ -27,10 +27,10 @@ const CreateBlog = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-    if (heading !== null && text !== null && imageUpload) {
+    if (auth.currentUser && heading !== null && text !== null && imageUpload) {
       await uploadBytesResumable(imageRef, imageUpload).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) =>
-          set(refDatabase(database, "blogs/" + userId), {
+          push(refDatabase(database, "blogs/"), {
             title: heading,
             text: text,
             tags: tags.split(",").map((tag) => tag.trim()),

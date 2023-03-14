@@ -11,6 +11,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   padding: 16px;
   width: 400px;
+  z-index: 999;
   &-content {
     color: $white-color;
     p {

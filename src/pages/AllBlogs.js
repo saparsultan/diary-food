@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const AllBlogs = () => {
   const [blogs, setBlogs] = useState([]);
 
-  let limitNumber = 1;
+  let limitNumber = 2;
 
   useEffect(() => {
     const recipes = ref(database, "blogs");
@@ -15,6 +15,7 @@ const AllBlogs = () => {
     const unregisterFunction = onValue(lastTenArticlesQuery, (snapshot) => {
       const newValObj = snapshot.val();
       const keys = Object.entries(newValObj);
+      console.log("keys", keys)
       setBlogs(keys);
     });
 

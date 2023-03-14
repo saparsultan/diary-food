@@ -16,6 +16,9 @@
   transition: background-color .2s ease-in-out;
   &--one {
     grid-gap: 0;
+    &:hover {
+      opacity: .8;
+    }
   }
   &--add {
     padding-left: 13px;

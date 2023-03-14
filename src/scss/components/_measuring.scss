@@ -50,6 +50,11 @@
         content: 'кг';
       }
     }
+    &-kcal {
+      &::after {
+        content: 'ккал';
+      }
+    }
     &-cm {
       &::after {
         content: 'см';

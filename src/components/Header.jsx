@@ -13,6 +13,7 @@ import {
   MEASURING,
   PRODUCTS,
   ADD_MEASURING,
+  CREATE_BLOG,
 } from "../utils/consts";
 
 const Header = () => {
@@ -43,6 +44,8 @@ const Header = () => {
                     return "Избранное";
                   case BLOGS:
                     return "Статьи";
+                  case CREATE_BLOG:
+                      return "Создать статью";
                   case ADD_DIARY:
                     return "Добавить в дневник";
                   case ADD_MEASURING:
