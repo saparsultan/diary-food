@@ -7,8 +7,8 @@ import {
   set,
   onValue,
   serverTimestamp,
-  push,
 } from "firebase/database";
+import "react-tabs/style/react-tabs.scss";
 import { storage, database, auth } from "../firebase-config";
 import recipeUses from "../data/recipeUses";
 import categoriesDishes from "../data/categoriesDishes";
@@ -28,7 +28,6 @@ const CreateRecipe = ({ isAuth }) => {
   const [recipeProduct, setRecipeProduct] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log("recipeProduct", recipeProduct);
   React.useEffect(() => {
     const productsRef = refDatabase(database, "products");
     const unregisterFunction = onValue(productsRef, (snapshot) => {
@@ -54,8 +53,7 @@ const CreateRecipe = ({ isAuth }) => {
   };
 
   const changeAmountWeight = ({ target }) => {
-    let { value, min } = target;
-    value = Math.max(Number(min), Math.min(Number(value)));
+    let { value } = target;
     setAmountWeight(value);
   };
 
@@ -93,10 +91,13 @@ const CreateRecipe = ({ isAuth }) => {
 
   const addProduct = (e) => {
     e.preventDefault();
-    if (selectProduct !== null && amountWeight > 0) {
+    if (selectProduct !== null && +amountWeight > 0) {
       const newObj = selectProduct;
-      newObj.amount = amountWeight;
-      newObj._id = v4();
+      newObj.calories = selectProduct?.calories * +amountWeight;
+      newObj.amount = +amountWeight;
+      newObj.carbs = selectProduct?.carbs * +amountWeight;
+      newObj.fats = selectProduct?.fats * +amountWeight;
+      newObj.proteins = selectProduct?.proteins * +amountWeight;
       setRecipeProduct((pre) => [...pre, newObj]);
       setSelectProduct(null);
     }
@@ -255,7 +256,7 @@ const CreateRecipe = ({ isAuth }) => {
                       <label className="form-item__label">Количеcтво:</label>
                       <div className="form-item__addition">
                         <input
-                          type="number"
+                          type="text"
                           className="form-item__input form-item__input--weight"
                           value={amountWeight}
                           min="0"
@@ -299,7 +300,7 @@ const CreateRecipe = ({ isAuth }) => {
                     value={newDescription}
                     name="desc"
                     required
-                    className="form-item__input"
+                    className="form-item__input form-item__textarea"
                     placeholder="Заполните краткое описание рецепта"
                     onChange={(e) => setNewDescription(e.target.value)}
                   />
@@ -313,7 +314,7 @@ const CreateRecipe = ({ isAuth }) => {
                     value={newMethods}
                     name="methods"
                     required
-                    className="form-item__input"
+                    className="form-item__input form-item__textarea"
                     placeholder="Опишите метод приготовления"
                     onChange={(e) => setNewMethods(e.target.value)}
                   />

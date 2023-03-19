@@ -11,8 +11,8 @@ const AddedMeasuring = () => {
         Вес и измерения на этот день уже записан
       </div>
       <Link to={MEASURING} className="btn btn--add empty-diary__btn">
-          <span>Войти</span>
-        </Link>
+        <span>Посмотреть</span>
+      </Link>
     </div>
   );
 };

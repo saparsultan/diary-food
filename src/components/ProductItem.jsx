@@ -7,7 +7,7 @@ const ProductItem = ({ products }) => {
         <div className="products-item" key={item?.name + i}>
           <div className="products-item__name">{item?.name}</div>
           <div className="products-item__weight">
-            {item?.weight} {item?.unit}
+            {item?.amount} {item?.unit.toLowerCase()}
           </div>
         </div>
       ))}

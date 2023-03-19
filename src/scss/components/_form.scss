@@ -51,6 +51,9 @@
       border-radius: 50px;
     }
   }
+  &__textarea {
+    width: 100%!important;
+  }
   &__addition {
     display: grid;
     grid-template-columns: auto auto;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ADD_DIARY, ADD_MEASURING, FAVORITES, LOGIN, MEASURING, RECIPES } from "../utils/consts";
+import { ADD_MEASURING, LOGIN, MEASURING, RECIPES } from "../utils/consts";
 
 const EmptyAddMeasuring = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -34,7 +34,7 @@ const EmptyAddMeasuring = () => {
       </div>
       {isAuth ? (
         <Link
-          to={pathname === MEASURING ? ADD_MEASURING : ADD_DIARY}
+          to={pathname === MEASURING ? ADD_MEASURING : RECIPES}
           className="btn btn--add empty-diary__btn"
         >
           <span>Добавить</span>

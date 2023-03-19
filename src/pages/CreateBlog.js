@@ -1,13 +1,11 @@
 import React from "react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { ref as refDatabase, set, onValue, serverTimestamp, push } from "firebase/database";
-import { auth, database, storage } from "../firebase-config";
+import { ref as refDatabase, serverTimestamp, push } from "firebase/database";
 import { v4 } from "uuid";
-import firebase from 'firebase/compat/app';
+import { auth, database, storage } from "../firebase-config";
 
 const CreateBlog = () => {
   const userName = localStorage.getItem("user.name");
-  const userId= localStorage.getItem("user.uid");
   const [heading, setHeading] = React.useState("");
   const [text, setText] = React.useState(null);
   const [tags, setTags] = React.useState("");
@@ -27,7 +25,7 @@ const CreateBlog = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-    if (auth.currentUser && heading !== null && text !== null && imageUpload) {
+    if (auth?.currentUser && heading !== null && text !== null && imageUpload) {
       await uploadBytesResumable(imageRef, imageUpload).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) =>
           push(refDatabase(database, "blogs/"), {
@@ -64,7 +62,7 @@ const CreateBlog = () => {
             value={text}
             name="desc"
             required
-            className="form-item__input"
+            className="form-item__input form-item__textarea"
             placeholder="Напишите текст для статьи"
             onChange={(e) => setText(e.target.value)}
           />

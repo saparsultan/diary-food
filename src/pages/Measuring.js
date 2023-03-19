@@ -1,6 +1,7 @@
-import { get, push, ref } from "firebase/database";
+import { get, ref } from "firebase/database";
 import React, { useEffect } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import "react-tabs/style/react-tabs.scss";
 import EmptyAddMeasuring from "../components/EmptyAddMeasuring";
 import SelectDate from "../components/SelectDate";
 import { auth, database } from "../firebase-config";
@@ -17,7 +18,9 @@ const Measuring = () => {
     const getMeasuring = async () => {
       const measuringRef = ref(
         database,
-        `measuring/${auth?.currentUser?.uid}/${startDate.toString().slice(0, 15)}`
+        `measuring/${auth?.currentUser?.uid}/${startDate
+          .toString()
+          .slice(0, 15)}`
       );
       const snapshotMeasuring = await get(measuringRef);
       const dataMeasuring = (await snapshotMeasuring.val())
@@ -39,11 +42,13 @@ const Measuring = () => {
           <Tab>График</Tab>
         </TabList>
         <TabPanel>
-          <SelectDate
-            selected={startDate}
-            handleSelectDate={handleSelectDate}
-            styleTitle={"center"}
-          />
+          <div className="date-wrap">
+            <SelectDate
+              selected={startDate}
+              handleSelectDate={handleSelectDate}
+              styleTitle={"center"}
+            />
+          </div>
           {measuring ? (
             <div className="measuring">
               <div className="measuring-item">
@@ -100,7 +105,7 @@ const Measuring = () => {
             </div>
           )}
         </TabPanel>
-        <TabPanel>Пока нет</TabPanel>
+        <TabPanel>Здесь будет график</TabPanel>
       </Tabs>
     </>
   );

@@ -52,6 +52,11 @@ body {
 
 .content {
   position: relative;
+  &__wrap {
+    padding: 16px;
+    background-color: $white-color;
+    border-radius: 16px;
+  }
 }
 
 .filter {

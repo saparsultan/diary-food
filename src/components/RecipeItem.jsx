@@ -1,23 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  getDatabase,
   ref,
-  push,
-  update,
   set,
   get,
   remove,
 } from "firebase/database";
 import { auth, database } from "../firebase-config";
-import calories from "../assets/images/calories.svg";
-import protein from "../assets/images/protein.svg";
-import carb from "../assets/images/carb.svg";
-import fat from "../assets/images/fat.svg";
-import benefit from "../assets/images/benefit.svg";
-import addSvg from "../assets/images/plus.svg";
-import removeSvg from "../assets/images/remove.svg";
 import ModalNotify from "./ModalNotify";
+import calories from "../assets/images/calories.svg";
 
 const RecipeItem = ({
   data,
@@ -34,7 +25,6 @@ const RecipeItem = ({
   const [isFavorite, setIsFavorite] = useState(favorites?.includes(data[0]));
   const [isDiaryFoodId, setIsDiaryFoodId] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  console.log("isDiaryFoodId", isDiaryFoodId);
 
   useEffect(() => {
     const getFavorites = async () => {
@@ -64,15 +54,15 @@ const RecipeItem = ({
       const newDiaryFood = dataDiaryFood ? Object.keys(dataDiaryFood) : [];
 
       const newObjArray = newDiaryFood.map((keyString) => {
-        console.log("keyString", keyString);
         return dataDiaryFood[keyString];
       });
 
       setDiaryFoodId(newObjArray);
       if (newObjArray.includes(data[0])) {
         setIsDiaryFoodId(true);
+      } else {
+        setIsDiaryFoodId(false);
       }
-      console.log("DIARY", newObjArray);
     };
     function cleanup() {
       getDiaryFood();
@@ -90,22 +80,6 @@ const RecipeItem = ({
     initvalue
   );
 
-  const sumProteins = data[1]?.products.reduce(
-    (acc, current) => acc + +current.proteins,
-    initvalue
-  );
-
-  const sumFats = data[1]?.products.reduce(
-    (acc, current) => acc + +current.fats,
-    initvalue
-  );
-
-  const sumCarbs = data[1]?.products.reduce(
-    (acc, current) => acc + +current.carbs,
-    initvalue
-  );
-
-  const sumBenefit = (sumCalories + sumProteins + sumFats + sumCarbs) / 4;
 
   const handleOpenModal = () => {
     setIsOpen(true);
@@ -141,12 +115,9 @@ const RecipeItem = ({
     }
   };
 
-  const idRemoveFood = diaryFoodId.filter((row) => row === data[0]);
-  console.log("idRemoveFood", idRemoveFood[0]);
-
   const handleRemoveDiary = async (e) => {
     e.preventDefault();
-    if (auth.currentUser) {
+    if (auth?.currentUser) {
       const eatingRef = ref(
         database,
         `diary/${auth?.currentUser?.uid}/${date
@@ -165,7 +136,7 @@ const RecipeItem = ({
 
   const handleAddFavorites = async (e) => {
     e.preventDefault();
-    if (auth.currentUser) {
+    if (auth?.currentUser) {
       const favoriteRef = ref(
         database,
         `favorites/${auth?.currentUser?.uid}/${data[0]}`
@@ -184,7 +155,7 @@ const RecipeItem = ({
 
   const handleRemoveFavorites = async (e) => {
     e.preventDefault();
-    if (auth.currentUser) {
+    if (auth?.currentUser) {
       const favoriteRef = ref(
         database,
         `favorites/${auth?.currentUser?.uid}/${data[0]}`
@@ -202,78 +173,44 @@ const RecipeItem = ({
   return (
     <>
       <div className="recipe">
-        <div className="recipe__title">{data[1]?.name}</div>
-        <div className="nutri-value__list">
-          <div className="nutri-value">
-            <div className="nutri-value__info">
-              <img src={calories} alt="Калории" width="20px" height="20px" />
-              <div className="nutri-value__sum">{Number.isInteger(sumCalories) ? sumCalories : sumCalories.toFixed(2)}</div>
-            </div>
-            <span className="nutri-value__name">Калории</span>
-          </div>
-          <div className="nutri-value">
-            <div className="nutri-value__info">
-              <img src={protein} alt="Калории" width="20px" height="20px" />
-              <div className="nutri-value__sum">{Number.isInteger(sumProteins) ? sumProteins : sumProteins.toFixed(2)}</div>
-            </div>
-            <span className="nutri-value__name">Белки</span>
-          </div>
-          <div className="nutri-value">
-            <div className="nutri-value__info">
-              <img src={fat} alt="Калории" width="20px" height="20px" />
-              <div className="nutri-value__sum">{Number.isInteger(sumFats) ? sumFats : sumFats.toFixed(2)}</div>
-            </div>
-            <span className="nutri-value__name">Жиры</span>
-          </div>
-          <div className="nutri-value">
-            <div className="nutri-value__info">
-              <img src={carb} alt="Калории" width="20px" height="20px" />
-              <div className="nutri-value__sum">{Number.isInteger(sumCarbs) ? sumCarbs : sumCarbs.toFixed(2)}</div>
-            </div>
-            <span className="nutri-value__name">Углеводы</span>
-          </div>
-          <div className="nutri-value">
-            <div className="nutri-value__info">
-              <img src={benefit} alt="Калории" width="20px" height="20px" />
-              <div className="nutri-value__sum">{Number.isInteger(sumBenefit) ? sumBenefit : sumBenefit.toFixed(2)}</div>
-            </div>
-            <span className="nutri-value__name">Польза</span>
-          </div>
-        </div>
         <Link
           to={`/recipes/${data[0]}`}
-          className="nutri-value__img"
+          className="recipe__img"
           state={{ isFavorite: isFavorite }}
         >
           <img
             src={data[1]?.image}
             alt={data[1]?.name}
-            width="322px"
-            height="200px"
           />
         </Link>
-        <div className="recipe__btns">
-          {isDiary && isDiaryFoodId === true ? (
+        <Link to={`/recipes/${data[0]}`} state={{ isFavorite: isFavorite }} className="recipe__title">{data[1]?.name}</Link>
+        <div className="recipe__footer">
+          {isDiaryFoodId === true ? (
             <div
-              className="btn btn--block btn--favorite"
+              className="btn btn--block btn--one"
               onClick={handleRemoveDiary}
+              style={{ backgroundColor: "#e45c5c" }}
             >
-              <img src={removeSvg} alt="Удалить с дневника" />
-              <span style={{ color: "#e45c5c" }}>Удалить</span>
+              <span>Удалить</span>
             </div>
           ) : (
-            isDiary && (
               <button
-                className="btn btn--block btn--favorite"
+                className="btn btn--block btn--one"
                 onClick={handleAddDiary}
-                // disabled={isDiaryFoodId === false ? "disabled" : ""}
               >
-                <img src={addSvg} alt="Добавить в дневник" />
-                <span>Добавить</span>
+
+                <span>В дневник</span>
               </button>
-            )
           )}
-          {!isDiary && isFavorite === true ? (
+                    <div className="nutri-value nutri-value--one">
+            <div className="nutri-value__info">
+              <img src={calories} alt="Калории" width="20px" height="20px" />
+              <div className="nutri-value__sum">{Number.isInteger(sumCalories) ? sumCalories : sumCalories.toFixed(2)}</div>
+            </div>
+            <span className="nutri-value__name">KCal</span>
+          </div>
+        </div>
+        {isFavorite === true ? (
             <div
               className="btn btn--block btn--favorite"
               onClick={(e) => {
@@ -296,7 +233,7 @@ const RecipeItem = ({
               </svg>
             </div>
           ) : (
-            !isDiary && (
+             (
               <div
                 className="btn btn--block btn--favorite"
                 onClick={handleAddFavorites}
@@ -317,7 +254,6 @@ const RecipeItem = ({
               </div>
             )
           )}
-        </div>
       </div>
       <ModalNotify isOpen={isOpen} onClose={handleCloseModal} type="error">
         <p>Вам необходимо войти.</p>

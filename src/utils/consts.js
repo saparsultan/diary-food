@@ -1,4 +1,5 @@
-export const HOME = "/";
+export const LANDING = "/";
+export const HOME = "/diary";
 export const ABOUT = "/about";
 export const LOGIN = "/login";
 export const REGISTRATION = "/registration";
@@ -7,7 +8,6 @@ export const PROFILE = "/profile";
 export const CREATE_PRODUCT = "/create-product";
 export const CREATE_RECIPE = "/create-recipe";
 export const CREATE_BLOG = "/create-blog";
-export const ADD_DIARY = "/add-diary";
 
 export const RECIPES = "/recipes";
 export const RECIPE_PAGE = "/recipes/:id";

@@ -1,55 +1,61 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import {
+  ABOUT,
   BLOGS,
+  FAVORITES,
   HOME,
+  LOGIN,
   MEASURING,
   PRODUCTS,
-  PROFILE,
   RECIPES,
 } from "../utils/consts";
+import logoLanding from "../assets/images/logo-landing.svg";
+import favoritesSvg from "../assets/images/favorites.svg";
+import bgHero from "../assets/images/bg-hero.jpg";
 
-const Menu = () => {
-  const [isAuth, setIsAuth] = useState(false);
-  const [userName, setUserName] = useState("");
-
-  const userNameValue = localStorage.getItem("user.name");
-  const isAuthValue = localStorage.getItem("isAuth");
-  const isAuthBooleanValue = JSON.parse(isAuthValue);
-
-  useEffect(() => {
-    setIsAuth(isAuthBooleanValue);
-    setUserName(userNameValue);
-  }, [isAuthBooleanValue, userNameValue]);
-
+const Landing = () => {
   let activeClassName = "nav__link--active";
-
   return (
-    <div className="menu">
-      <div className="user">
-        <div className="user__header">
-          <div className="user__avatar">
-            {userName ? userName[0]?.toUpperCase() : "Г"}
-          </div>
-          <div className="user__text">
-            <div className="user__name">{userName ? userName : "Гость"}</div>
-            {isAuth && (
-              <Link to={PROFILE} className="user__link">
-                В личный кабинет
-              </Link>
-            )}
-          </div>
+    <div className="landing">
+      <div className="landing-header">
+        <img src={logoLanding} alt="Логотип" />
+        <div className="lh-action">
+          <Link to={FAVORITES} className="lh-action__favorites">
+            <img src={favoritesSvg} alt="Избранное" />
+          </Link>
+          <div className="lh-action__line"></div>
+          <Link to={LOGIN} className="lh-action__login">
+            Войти
+          </Link>
         </div>
-        {!isAuth && (
-          <div className="user__footer">
-            <Link to="login" className="auth-btn auth-btn--primary">
-              Войти
-            </Link>
-          </div>
-        )}
       </div>
-      <nav className="nav__container">
-        <ul className="nav">
+      <div className="landing-main">
+        <ul className="lh-nav nav">
+          <li className="nav__item">
+            <NavLink to={ABOUT} className="nav__link">
+              {({ isActive }) => (
+                <>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10.479 19.3958C8.64567 19.3958 7.11428 18.781 5.88484 17.5516C4.65595 16.3227 4.0415 14.7916 4.0415 12.9583V6.02075C4.0415 5.54853 4.20484 5.14909 4.5315 4.82242C4.85762 4.49631 5.25678 4.33325 5.729 4.33325C5.89567 4.33325 6.03456 4.36797 6.14567 4.43742C6.25678 4.50686 6.34706 4.59714 6.4165 4.70825V3.52075C6.4165 3.04853 6.57956 2.64909 6.90567 2.32242C7.23234 1.99631 7.63178 1.83325 8.104 1.83325C8.27067 1.83325 8.4165 1.85742 8.5415 1.90575C8.6665 1.95464 8.77067 2.0277 8.854 2.12492C8.93734 1.63881 9.11789 1.2602 9.39567 0.989085C9.67345 0.71853 10.0346 0.583252 10.479 0.583252C10.9234 0.583252 11.3054 0.722141 11.6248 0.999919C11.9443 1.2777 12.1318 1.62492 12.1873 2.04159V2.52075C12.2568 2.43742 12.3507 2.37131 12.469 2.32242C12.5868 2.27409 12.7151 2.24992 12.854 2.24992C13.3401 2.24992 13.7429 2.41297 14.0623 2.73909C14.3818 3.06575 14.5415 3.4652 14.5415 3.93742V7.39575C14.6248 7.27075 14.729 7.18047 14.854 7.12492C14.979 7.06936 15.104 7.04159 15.229 7.04159C15.7012 7.04159 16.1004 7.20464 16.4265 7.53075C16.7532 7.85742 16.9165 8.25686 16.9165 8.72909V12.9583C16.9165 14.7916 16.3018 16.3227 15.0723 17.5516C13.8434 18.781 12.3123 19.3958 10.479 19.3958ZM10.479 18.1458C11.2151 18.1458 11.8993 18.0105 12.5315 17.7399C13.1632 17.4688 13.7118 17.1041 14.1773 16.6458C14.6423 16.1874 15.0068 15.6421 15.2707 15.0099C15.5346 14.3783 15.6665 13.6944 15.6665 12.9583V8.72909C15.6665 8.60409 15.6248 8.49992 15.5415 8.41659C15.4582 8.33325 15.354 8.29159 15.229 8.29159C15.104 8.29159 14.9965 8.33325 14.9065 8.41659C14.8159 8.49992 14.7707 8.60409 14.7707 8.72909V12.2291L14.4582 12.2708C13.7915 12.3958 13.2465 12.6944 12.8232 13.1666C12.3993 13.6388 12.1457 14.2083 12.0623 14.8749H10.6665C10.7359 13.986 11.0068 13.2221 11.479 12.5833C11.9512 11.9444 12.5554 11.4721 13.2915 11.1666V3.93742C13.2915 3.81242 13.2498 3.70825 13.1665 3.62492C13.0832 3.54159 12.979 3.49992 12.854 3.49992C12.729 3.49992 12.6215 3.54159 12.5315 3.62492C12.4409 3.70825 12.3957 3.81242 12.3957 3.93742V9.35409H10.9373V2.27075C10.9373 2.14575 10.8923 2.04159 10.8023 1.95825C10.7118 1.87492 10.604 1.83325 10.479 1.83325C10.354 1.83325 10.2498 1.87492 10.1665 1.95825C10.0832 2.04159 10.0415 2.14575 10.0415 2.27075V9.35409H8.56234V3.52075C8.56234 3.39575 8.51734 3.29159 8.42734 3.20825C8.33678 3.12492 8.229 3.08325 8.104 3.08325C7.979 3.08325 7.87484 3.12492 7.7915 3.20825C7.70817 3.29159 7.6665 3.39575 7.6665 3.52075V10.1874H6.18734V6.02075C6.18734 5.89575 6.14567 5.79159 6.06234 5.70825C5.979 5.62492 5.86789 5.58325 5.729 5.58325C5.604 5.58325 5.49984 5.62492 5.4165 5.70825C5.33317 5.79159 5.2915 5.89575 5.2915 6.02075V12.9583C5.2915 13.6944 5.42345 14.3783 5.68734 15.0099C5.95123 15.6421 6.31567 16.1874 6.78067 16.6458C7.24623 17.1041 7.79511 17.4688 8.42734 17.7399C9.059 18.0105 9.74289 18.1458 10.479 18.1458Z"
+                      fill="#DBF1E7"
+                    />
+                  </svg>
+
+                  <span className={isActive ? activeClassName : undefined}>
+                    О нас
+                  </span>
+                </>
+              )}
+            </NavLink>
+          </li>
           <li className="nav__item">
             <NavLink className="nav__link" to={HOME}>
               {({ isActive }) => (
@@ -167,30 +173,7 @@ const Menu = () => {
             </NavLink>
           </li>
           <li className="nav__item">
-            <NavLink to="favorites" className="nav__link">
-              {({ isActive }) => (
-                <>
-                  <svg
-                    width="22"
-                    height="22"
-                    viewBox="0 0 22 22"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M17.3125 21.9996C17.1821 21.9996 17.0509 21.9674 16.933 21.9014L11.0001 18.6218L5.06815 21.9014C4.80495 22.0483 4.48124 22.0294 4.23532 21.8558C3.98939 21.6822 3.86368 21.3836 3.91239 21.0866L5.05322 14.0907L2.56334 11.5733C2.2585 11.2646 2.26085 10.7672 2.56963 10.4624C2.87841 10.1575 3.37576 10.1599 3.68061 10.4686L6.45177 13.2705C6.62856 13.4496 6.70948 13.7018 6.66862 13.9493L5.72343 19.7438L10.6199 17.0371C10.8564 16.9067 11.144 16.9067 11.3805 17.0371L16.2769 19.7438L15.3317 13.9493C15.2917 13.7034 15.371 13.452 15.5447 13.2744L19.584 9.13455L14.0377 8.28755C13.7792 8.24751 13.5568 8.0817 13.4453 7.84439L11.0001 2.63523L8.55507 7.84439C8.44353 8.0817 8.22118 8.24751 7.96268 8.28755L0.904735 9.36555C0.477316 9.43309 0.0750376 9.13689 0.0090389 8.70709C-0.0561742 8.27816 0.238463 7.87739 0.667455 7.81139L7.31054 6.79708L10.2891 0.451777C10.418 0.175996 10.6953 0 11.0001 0C11.3051 0 11.5824 0.175996 11.7113 0.451777L14.6898 6.79708L21.3329 7.81139C21.6237 7.8562 21.8656 8.0597 21.9591 8.33866C22.0526 8.61755 21.9819 8.92635 21.7768 9.13689L16.9471 14.0868L18.0888 21.0866C18.1375 21.3836 18.011 21.6822 17.7658 21.8558C17.6299 21.9509 17.4712 21.9996 17.3125 21.9996Z"
-                      fill="#019852"
-                    />
-                  </svg>
-                  <span className={isActive ? activeClassName : undefined}>
-                    Избранное
-                  </span>
-                </>
-              )}
-            </NavLink>
-          </li>
-          <li className="nav__item">
-            <NavLink to={PRODUCTS} className="nav__link">
+            <NavLink to={PRODUCTS} className="nav__link nav__link--products">
               {({ isActive }) => (
                 <>
                   <svg
@@ -209,16 +192,36 @@ const Menu = () => {
                     />
                   </svg>
                   <span className={isActive ? activeClassName : undefined}>
-                    Все продукты
+                    Список покупок
                   </span>
                 </>
               )}
             </NavLink>
           </li>
         </ul>
-      </nav>
+        <div className="lh-content">
+          <div className="lh-content__left hero-text">
+            <h1 className="hero-text__title">
+              Крепкое <span>здоровье</span> начинается с того, что вы едите.
+            </h1>
+            <p className="hero-text__desc">
+              Хотите есть более осознанно? Отслеживайте приемы пищи, узнавайте о
+              своих привычках и достигайте своих целей с My Food Diary.
+            </p>
+            <NavLink to={RECIPES} className="hero-text__btn btn btn--one">
+              Все рецепты
+            </NavLink>
+          </div>
+          <div className="lh-content__right">
+            <img src={bgHero} alt="" />
+          </div>
+        </div>
+        <div className="lh-footer">
+          <div className="lh-footer__copy">© 2023 My Food Diary.</div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Menu;
+export default Landing;

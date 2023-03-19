@@ -1,22 +1,18 @@
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import CaloriesFilter from "../components/CaloriesFilter";
 import CategoryFilter from "../components/CategoryFilter";
 import Search from "../components/Search";
 import SelectDate from "../components/SelectDate";
 import SelectEating from "../components/SelectEating";
-import { ADD_DIARY } from "../utils/consts";
 import recipeUses from "../data/recipeUses";
 import RecipeUsesFilter from "../components/RecipUsesFilter";
 import RecipeItem from "../components/RecipeItem";
 
 const FoodDiary = ({ allRecipes }) => {
-  let { pathname } = useLocation();
   const [startDate, setStartDate] = React.useState(new Date());
   const [query, setQuery] = React.useState("");
   const [category, setCategory] = React.useState("");
   const [eating, setEating] = React.useState("breakfast");
-  const [recomCalories, setRecomCalories] = React.useState("");
   const [minCalories, setMinCalories] = React.useState(0);
   const [maxCalories, setMaxCalories] = React.useState(0);
 
@@ -138,21 +134,8 @@ const FoodDiary = ({ allRecipes }) => {
   }, [query, category, recipeUsesValue, minCalories, maxCalories]);
 
   return (
-    <>
+    <div className="content__wrap">
       <SelectDate selected={startDate} handleSelectDate={handleSelectDate} />
-      <div className="form-item" style={{ marginTop: "20px" }}>
-        <label className="form-item__label" style={{ marginBottom: "4px" }}>
-          Рекомендуемая калорийность
-        </label>
-        <input
-          type="number"
-          className="form-item__input form-item__input--recom"
-          placeholder="0"
-          value={recomCalories}
-          onChange={(e) => setRecomCalories(e.target.value)}
-          style={{ height: "46px", border: "none" }}
-        />
-      </div>
       <SelectEating value={eating} handleChangeEating={handleChangeEating} />
 
       <div className="recipe-grid__wrap">
@@ -164,32 +147,26 @@ const FoodDiary = ({ allRecipes }) => {
               data={data}
               date={startDate}
               eating={eating}
-              recomCalories={recomCalories}
               isDiary
             />
           ))}
         </div>
       </div>
-
-      {pathname === ADD_DIARY ? (
-        <div className="filter-grid" style={{ paddingTop: "24px" }}>
-          <Search query={query} handleQuery={handleQuery} />
-          <CategoryFilter category={category} handleCategory={handleCategory} />
-          <CaloriesFilter
-            minCalories={minCalories}
-            maxCalories={maxCalories}
-            handleChangeMinCalories={handleChangeMinCalories}
-            handleChangeMaxCalories={handleChangeMaxCalories}
-          />
-          <RecipeUsesFilter
-            data={recipeUsesValue}
-            handleChangeRecipeUses={handleChangeRecipeUses}
-          />
-        </div>
-      ) : (
-        ""
-      )}
-    </>
+      <div className="filter-grid">
+        <Search query={query} handleQuery={handleQuery} />
+        <CategoryFilter category={category} handleCategory={handleCategory} />
+        <CaloriesFilter
+          minCalories={minCalories}
+          maxCalories={maxCalories}
+          handleChangeMinCalories={handleChangeMinCalories}
+          handleChangeMaxCalories={handleChangeMaxCalories}
+        />
+        <RecipeUsesFilter
+          data={recipeUsesValue}
+          handleChangeRecipeUses={handleChangeRecipeUses}
+        />
+      </div>
+    </div>
   );
 };
 

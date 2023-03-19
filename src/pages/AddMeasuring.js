@@ -1,4 +1,4 @@
-import { get, push, ref, set } from "firebase/database";
+import { get, ref, set } from "firebase/database";
 import React, { useEffect } from "react";
 import AddedMeasuring from "../components/AddedMeasuring";
 import SelectDate from "../components/SelectDate";
@@ -24,7 +24,9 @@ const AddMeasuring = () => {
     const getMeasuring = async () => {
       const measuringRef = ref(
         database,
-        `measuring/${auth?.currentUser?.uid}/${startDate.toString().slice(0, 15)}`
+        `measuring/${auth?.currentUser?.uid}/${startDate
+          .toString()
+          .slice(0, 15)}`
       );
       const snapshotMeasuring = await get(measuringRef);
       const idMeasuring = (await snapshotMeasuring.val())
@@ -126,10 +128,24 @@ const AddMeasuring = () => {
       },
     };
 
-    if (auth) {
+    if (
+      auth?.currentUser &&
+      measuringWeight > 0 &&
+      measuringBreast > 0 &&
+      measuringWaist > 0 &&
+      measuringBelly > 0 &&
+      measuringThigh > 0 &&
+      measuringWeightTarget > 0 &&
+      measuringBreastTarget > 0 &&
+      measuringWaistTarget > 0 &&
+      measuringBellyTarget > 0 &&
+      measuringThighTarget > 0
+    ) {
       const measuringValue = ref(
         database,
-        `measuring/${auth?.currentUser?.uid}/${startDate?.toString().slice(0, 15)}`
+        `measuring/${auth?.currentUser?.uid}/${startDate
+          ?.toString()
+          .slice(0, 15)}`
       );
       set(measuringValue, dataMeasuring);
     } else {
@@ -138,12 +154,14 @@ const AddMeasuring = () => {
   };
 
   return (
-    <>
-      <SelectDate
-        selected={startDate}
-        handleSelectDate={handleSelectDate}
-        styleTitle={"center"}
-      />
+    <div>
+      <div className="date-wrap">
+        <SelectDate
+          selected={startDate}
+          handleSelectDate={handleSelectDate}
+          styleTitle={"center"}
+        />
+      </div>
       {measuringDate !== startDate.toString().slice(0, 15) ? (
         <>
           {" "}
@@ -306,8 +324,8 @@ const AddMeasuring = () => {
             </div>
           </div>
           <div className="form-footer">
-            <button className="btn" onClick={handleAddMeasuring}>
-              Добавить
+            <button className="btn btn--one" onClick={handleAddMeasuring}>
+              Сохранить
             </button>
           </div>
         </>
@@ -316,7 +334,7 @@ const AddMeasuring = () => {
           <AddedMeasuring />
         </div>
       )}
-    </>
+    </div>
   );
 };
 

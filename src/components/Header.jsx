@@ -6,7 +6,6 @@ import {
   CREATE_RECIPE,
   RECIPES,
   FAVORITES,
-  ADD_DIARY,
   LOGIN,
   REGISTRATION,
   BLOGS,
@@ -14,9 +13,10 @@ import {
   PRODUCTS,
   ADD_MEASURING,
   CREATE_BLOG,
+  ABOUT,
 } from "../utils/consts";
 
-const Header = () => {
+const Header = ({withFilter}) => {
   let { pathname } = useLocation();
   const pathnameCopy = pathname;
   const parts = pathname.split("/");
@@ -25,7 +25,7 @@ const Header = () => {
   const isAuth = localStorage.getItem("isAuth");
   return (
     <header className="header__container">
-      <div className="container">
+      <div className="container" style={withFilter ? {maxWidth: "1226px"} : {}}>
         <div className="header">
           <div className="header__left df">
             <Link to="/" className="header__logo logo">
@@ -46,18 +46,18 @@ const Header = () => {
                     return "Статьи";
                   case CREATE_BLOG:
                       return "Создать статью";
-                  case ADD_DIARY:
-                    return "Добавить в дневник";
                   case ADD_MEASURING:
                     return "Добавить вес и измерения";
                   case MEASURING:
-                    return "Вес и измерения";
+                    return "Вес и параметры";
                   case PRODUCTS:
                     return "Все продукты";
                   case LOGIN:
                     return "Авторизация";
                   case REGISTRATION:
                     return "Регистрация";
+                  case ABOUT:
+                    return "О сервисе";
                   case pathnameCopy:
                     if (pathnameSplit === "blogs") {
                       return "Статьи";

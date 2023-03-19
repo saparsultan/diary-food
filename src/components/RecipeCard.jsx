@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  ref,
-  onValue,
-  remove,
-  set,
-} from "firebase/database";
+import { ref, onValue, remove, set } from "firebase/database";
 import { format } from "date-fns";
+import { auth, database } from "../firebase-config";
+import ProductItem from "./ProductItem";
+import ModalNotify from "./ModalNotify";
 import calories from "../assets/images/calories.svg";
 import protein from "../assets/images/protein.svg";
 import carb from "../assets/images/carb.svg";
 import fat from "../assets/images/fat.svg";
 import benefit from "../assets/images/benefit.svg";
-import { auth, database } from "../firebase-config";
-import ProductItem from "./ProductItem";
-import ModalNotify from "./ModalNotify";
 
 const RecipeCard = ({ idRecipe }) => {
   const location = useLocation();
@@ -116,6 +111,8 @@ const RecipeCard = ({ idRecipe }) => {
     }
   };
 
+  console.log("item?.products", item?.products)
+
   return (
     <>
       <div className="card__container">
@@ -184,7 +181,9 @@ const RecipeCard = ({ idRecipe }) => {
                       height="20px"
                     />
                     <div className="nutri-value__sum">
-                      {sumCalories && sumCalories.toFixed(2)}
+                      {Number.isInteger(sumCalories)
+                        ? sumCalories
+                        : sumCalories.toFixed(2)}
                     </div>
                   </div>
                   <span className="nutri-value__name">Калории</span>
@@ -197,21 +196,31 @@ const RecipeCard = ({ idRecipe }) => {
                       width="20px"
                       height="20px"
                     />
-                    <div className="nutri-value__sum">{sumProteins.toFixed(2)}</div>
+                    <div className="nutri-value__sum">
+                      {Number.isInteger(sumProteins)
+                        ? sumProteins
+                        : sumProteins.toFixed(2)}
+                    </div>
                   </div>
                   <span className="nutri-value__name">Белки</span>
                 </div>
                 <div className="nutri-value">
                   <div className="nutri-value__info">
                     <img src={fat} alt="Калории" width="20px" height="20px" />
-                    <div className="nutri-value__sum">{sumFats.toFixed(2)}</div>
+                    <div className="nutri-value__sum">
+                      {Number.isInteger(sumFats) ? sumFats : sumFats.toFixed(2)}
+                    </div>
                   </div>
                   <span className="nutri-value__name">Жиры</span>
                 </div>
                 <div className="nutri-value">
                   <div className="nutri-value__info">
                     <img src={carb} alt="Калории" width="20px" height="20px" />
-                    <div className="nutri-value__sum">{sumCarbs.toFixed(2)}</div>
+                    <div className="nutri-value__sum">
+                      {Number.isInteger(sumCarbs)
+                        ? sumCarbs
+                        : sumCarbs.toFixed(2)}
+                    </div>
                   </div>
                   <span className="nutri-value__name">Углеводы</span>
                 </div>
@@ -223,7 +232,11 @@ const RecipeCard = ({ idRecipe }) => {
                       width="20px"
                       height="20px"
                     />
-                    <div className="nutri-value__sum">{sumBenefit.toFixed(2)}</div>
+                    <div className="nutri-value__sum">
+                      {Number.isInteger(sumBenefit)
+                        ? sumBenefit
+                        : sumBenefit.toFixed(2)}
+                    </div>
                   </div>
                   <span className="nutri-value__name">Польза</span>
                 </div>
@@ -234,9 +247,7 @@ const RecipeCard = ({ idRecipe }) => {
             <div className="card-heading">Описание</div>
             <p className="card-p">{item?.description}</p>
             <div className="card-heading">Метод приготовления</div>
-            <p className="card-p">
-{item?.newMethods}
-            </p>
+            <p className="card-p">{item?.newMethods}</p>
           </div>
         </div>
       </div>

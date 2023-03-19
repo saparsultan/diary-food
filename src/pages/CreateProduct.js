@@ -15,10 +15,6 @@ const CreateProduct = ({ isAuth }) => {
   const [selectUnit, setSelectUnit] = useState("г(мл)");
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log("newWeight", newWeight);
-  console.log("selectUnit", selectUnit);
-  
-
   const handleChangeUnit = (e) => {
     const valueUnit = e.target.value;
     setSelectUnit(valueUnit);
@@ -38,20 +34,27 @@ const CreateProduct = ({ isAuth }) => {
   };
 
   const createProducts = async () => {
-    if(auth.currentUser && newName !== "" && newCalories >= 0 && newProteins >= 0 && newFats >= 0 && newCarbs >=0) {
+    if (
+      auth.currentUser &&
+      newName !== "" &&
+      newCalories >= 0 &&
+      newProteins >= 0 &&
+      newFats >= 0 &&
+      newCarbs >= 0
+    ) {
       await set(ref(database, "products/" + v4()), {
         id: v4(),
         name: newName,
         unit: selectUnit,
-        weight: newWeight,
-        calories: newCalories,
-        proteins: newProteins,
-        fats: newFats,
-        carbs: newCarbs,
+        weight: +newWeight,
+        calories: +newCalories,
+        proteins: +newProteins,
+        fats: +newFats,
+        carbs: +newCarbs,
       });
       handleOpenModal();
       setTimeout(() => {
-        handleCloseModal()
+        handleCloseModal();
       }, 3000);
     }
   };

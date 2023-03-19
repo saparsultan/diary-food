@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ADD_DIARY, FAVORITES, LOGIN, RECIPES } from "../utils/consts";
+import { FAVORITES, LOGIN, RECIPES } from "../utils/consts";
 
 const EmptyAdd = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -33,10 +33,7 @@ const EmptyAdd = () => {
         пуст
       </div>
       {isAuth ? (
-        <Link
-          to={pathname === FAVORITES ? RECIPES : ADD_DIARY}
-          className="btn btn--add empty-diary__btn"
-        >
+        <Link to={RECIPES} className="btn btn--add empty-diary__btn">
           <span>Добавить</span>
         </Link>
       ) : (
@@ -60,8 +57,8 @@ const EmptyAdd = () => {
             />
           </svg>
           <span>
-          Вам необходимо войти, чтобы{" "}
-          {pathname === FAVORITES ? "сохранять рецепты" : "добавлять рецпеты"}
+            Вам необходимо войти, чтобы{" "}
+            {pathname === FAVORITES ? "сохранять рецепты" : "добавлять рецпеты"}
           </span>
         </div>
       )}

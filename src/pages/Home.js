@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, set } from "firebase/database";
 import SelectDate from "../components/SelectDate";
 import SelectEating from "../components/SelectEating";
 import RecipeItem from "../components/RecipeItem";
 import EmptyAdd from "../components/EmptyAdd";
 import { auth, database } from "../firebase-config";
 
-// import { useEditor, EditorContent } from '@tiptap/react'
-// import StarterKit from '@tiptap/starter-kit'
-
 const Home = ({ allRecipes }) => {
-
-  const localDate = new Date()
-  const [startDate, setStartDate] = useState(localDate);
+  const [startDate, setStartDate] = useState(new Date());
   const [eating, setEating] = useState("breakfast");
   const [diaryFoodName, setDiaryFoodName] = useState(null);
   const [recomCalories, setRecomCalories] = useState(null);
+
+  const [recomCaloriesTarget, setRecomCaloriesTarget] = useState("");
 
   const handleSelectDate = (value) => {
     setStartDate(value);
@@ -55,7 +52,6 @@ const Home = ({ allRecipes }) => {
     );
     const unregisterFunction = onValue(foodDiary, (snapshot) => {
       const newValObj = snapshot.val() ? snapshot.val() : null;
-      console.log("recomCalories", newValObj)
       setRecomCalories(newValObj);
     });
 
@@ -63,7 +59,7 @@ const Home = ({ allRecipes }) => {
       unregisterFunction();
     }
     return cleanup;
-  }, [startDate, eating]);
+  }, [startDate]);
 
   const newAllRecipesFunc = () => {
     const data = allRecipes?.filter((row) => diaryFoodName?.includes(row[0]));
@@ -84,8 +80,21 @@ const Home = ({ allRecipes }) => {
 
   const newArray = sumArray.reduce((acc, current) => acc + +current, 0);
 
+  const handleAddRecomCalories = (e) => {
+    e.preventDefault();
+    if (auth?.currentUser) {
+      const recomCaloriesRef = ref(
+        database,
+        `diary/${auth?.currentUser?.uid}/${startDate
+          ?.toString()
+          .slice(0, 15)}/recomCalories`
+      );
+      set(recomCaloriesRef, +recomCaloriesTarget);
+    }
+  };
+
   return (
-    <>
+    <div className="content__wrap">
       <SelectDate selected={startDate} handleSelectDate={handleSelectDate} />
       <SelectEating value={eating} handleChangeEating={handleChangeEating} />
       {newAllRecipes.length ? (
@@ -116,7 +125,37 @@ const Home = ({ allRecipes }) => {
       ) : (
         <EmptyAdd eating={eating} />
       )}
-    </>
+      <div className="filter-grid">
+        <div className="form-item">
+          <label class="form-item__label">
+            Рекомендуемая <br /> калорийность за день:
+          </label>
+          <input
+            type="text"
+            className="form-item__input"
+            placeholder="0"
+            value={recomCaloriesTarget}
+            onChange={(e) => setRecomCaloriesTarget(e.target.value)}
+            style={{
+              borderRadius: "50px",
+            }}
+          />
+        </div>
+        <button
+          className="btn btn--one btn--recomcal"
+          onClick={handleAddRecomCalories}
+          style={{
+            justifyContent: "center",
+            marginTop: "12px",
+            paddingTop: "10px",
+            paddingBottom: "10px",
+          }}
+          disabled={recomCalories > 0 && recomCalories ? true : false}
+        >
+          Сохранить
+        </button>
+      </div>
+    </div>
   );
 };
 

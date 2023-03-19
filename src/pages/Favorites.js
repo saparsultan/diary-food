@@ -53,7 +53,7 @@ const Favorites = () => {
   };
 
   return (
-    <>
+    <div className="content__wrap">
       {filterData.length > 0 ? (
         <>
           <div className="recipe-grid">
@@ -70,7 +70,7 @@ const Favorites = () => {
       ) : (
         <EmptyAdd />
       )}
-    </>
+    </div>
   );
 };
 

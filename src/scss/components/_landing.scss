@@ -1,0 +1,153 @@
+.landing {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: 1026px;
+  margin: 32px auto;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 30px;
+    padding-right: 32px;
+    margin-bottom: 22px;
+  }
+
+  &-main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: $white-color;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+}
+
+.lh {
+  &-action {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 12px;
+    align-items: center;
+
+    &__favorites {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &__login {
+      font-weight: 700;
+      color: $primary-color;
+    }
+
+    &__line {
+      width: 1px;
+      height: 20px;
+      background-color: rgba(1, 152, 82, .2);
+    }
+  }
+
+  &-nav {
+    display: flex;
+    align-items: center;
+    grid-gap: 0;
+    padding: 12px 16px;
+    background-color: $primary-color;
+
+    .nav__item {
+      padding: 12px 16px;
+    }
+
+    .nav__link {
+      svg {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+
+        path {
+          fill: $white-color;
+        }
+      }
+
+      span {
+        font-weight: 400;
+        letter-spacing: .4px;
+        letter-spacing: .4px;
+        color: $white-color;
+      }
+
+      &--products {
+        svg {
+          path {
+            stroke: $white-color;
+            fill: none;
+          }
+        }
+      }
+    }
+  }
+
+  &-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 90px 32px;
+  }
+
+  &-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: auto;
+    padding: 20px 0;
+    border-top: 1px solid rgba(28, 32, 53, .08);
+
+    &__copy {
+      font-size: 14px;
+      color: $black40;
+    }
+  }
+}
+
+.hero {
+  &-text {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 20px;
+    width: 100%;
+    max-width: 379px;
+
+    &__title {
+      font-size: 60px;
+      font-weight: 700;
+      line-height: 64px;
+
+      span {
+        font-size: inherit;
+        color: $primary-color;
+      }
+    }
+
+    &__desc {
+      line-height: 23px;
+      color: $black72;
+    }
+
+    &__btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 326px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      font-weight: 700;
+      line-height: 24px;
+      text-transform: uppercase;
+      border-radius: 16px;
+    }
+  }
+}
