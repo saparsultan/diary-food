@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { ref, onValue, set } from "firebase/database";
+import { format } from "date-fns";
 import SelectDate from "../components/SelectDate";
 import SelectEating from "../components/SelectEating";
 import RecipeItem from "../components/RecipeItem";
 import EmptyAdd from "../components/EmptyAdd";
 import { auth, database } from "../firebase-config";
+import ProductItem from "../components/ProductItem";
 
 const Home = ({ allRecipes }) => {
   const [startDate, setStartDate] = useState(new Date());
@@ -68,15 +70,30 @@ const Home = ({ allRecipes }) => {
   const newAllRecipes = newAllRecipesFunc();
 
   let sumArray = [];
+  let sumProducts = [];
   for (let i = 0; i < newAllRecipes.length; i++) {
     if (diaryFoodName) {
-      let newArray = newAllRecipes[i][1].products.reduce(
+      let newArray = newAllRecipes[i][1].products;
+      let newArrayCalories = newArray.reduce(
         (acc, current) => acc + +current.calories,
         0
       );
-      sumArray.push(newArray);
+      for (let j = 0; j < newArray.length; j++) {
+        sumProducts.push(newArray[j]);
+      }
+      sumArray.push(newArrayCalories);
     }
   }
+
+  // let sumProducts = [];
+  // for (let i = 0; i < newAllRecipes.length; i++) {
+  //   if (diaryFoodName) {
+  //     let newArray = newAllRecipes[i][1].products;
+  //     for (let j = 0; j < newArray.length; j++) {
+  //       sumProducts.push(newArray[j]);
+  //     }
+  //   }
+  // }
 
   const newArray = sumArray.reduce((acc, current) => acc + +current, 0);
 
@@ -94,68 +111,84 @@ const Home = ({ allRecipes }) => {
   };
 
   return (
-    <div className="content__wrap">
-      <SelectDate selected={startDate} handleSelectDate={handleSelectDate} />
-      <SelectEating value={eating} handleChangeEating={handleChangeEating} />
-      {newAllRecipes.length ? (
-        <>
-          <div className="diary-result">
-            <div className="diary-result__item">
-              <span>Рекомендуемая калорийность за день:&nbsp;</span>
-              <span className="diary-result__item-sum">
-                {recomCalories} kCal
-              </span>
+    <>
+      <div className="content__wrap">
+        <SelectDate selected={startDate} handleSelectDate={handleSelectDate} />
+        <SelectEating value={eating} handleChangeEating={handleChangeEating} />
+        {newAllRecipes.length ? (
+          <>
+            <div className="diary-result">
+              <div className="diary-result__item">
+                <span>Рекомендуемая калорийность за день:&nbsp;</span>
+                <span className="diary-result__item-sum">
+                  {recomCalories} kCal
+                </span>
+              </div>
+              <div className="diary-result__item">
+                <span>Всего калорий:&nbsp;</span>
+                <span className="diary-result__item-sum">{newArray} kCal</span>
+              </div>
             </div>
-            <div className="diary-result__item">
-              <span>Всего калорий:&nbsp;</span>
-              <span className="diary-result__item-sum">{newArray} kCal</span>
+            <div className="recipe-grid">
+              {newAllRecipes.map((data, index) => (
+                <RecipeItem
+                  key={data[0] + index}
+                  data={data}
+                  date={startDate}
+                  eating={eating}
+                />
+              ))}
             </div>
+          </>
+        ) : (
+          <EmptyAdd eating={eating} />
+        )}
+        <div className="filter-grid">
+          <div className="form-item">
+            <label className="form-item__label">
+              Рекомендуемая <br /> калорийность за день:
+            </label>
+            <input
+              type="text"
+              className="form-item__input"
+              placeholder="0"
+              value={recomCaloriesTarget}
+              onChange={(e) => setRecomCaloriesTarget(e.target.value)}
+              style={{
+                borderRadius: "50px",
+              }}
+            />
           </div>
-          <div className="recipe-grid">
-            {newAllRecipes.map((data, index) => (
-              <RecipeItem
-                key={data[0] + index}
-                data={data}
-                date={startDate}
-                eating={eating}
-              />
-            ))}
-          </div>
-        </>
-      ) : (
-        <EmptyAdd eating={eating} />
-      )}
-      <div className="filter-grid">
-        <div className="form-item">
-          <label class="form-item__label">
-            Рекомендуемая <br /> калорийность за день:
-          </label>
-          <input
-            type="text"
-            className="form-item__input"
-            placeholder="0"
-            value={recomCaloriesTarget}
-            onChange={(e) => setRecomCaloriesTarget(e.target.value)}
+          <button
+            className="btn btn--one btn--recomcal"
+            onClick={handleAddRecomCalories}
             style={{
-              borderRadius: "50px",
+              justifyContent: "center",
+              marginTop: "12px",
+              paddingTop: "10px",
+              paddingBottom: "10px",
             }}
-          />
+            disabled={recomCalories > 0 && recomCalories ? true : false}
+          >
+            Сохранить
+          </button>
         </div>
-        <button
-          className="btn btn--one btn--recomcal"
-          onClick={handleAddRecomCalories}
-          style={{
-            justifyContent: "center",
-            marginTop: "12px",
-            paddingTop: "10px",
-            paddingBottom: "10px",
-          }}
-          disabled={recomCalories > 0 && recomCalories ? true : false}
-        >
-          Сохранить
-        </button>
       </div>
-    </div>
+      {sumProducts.length > 0 && (
+        <div className="products products-diary">
+          <div className="products-diary__title">
+            Продукты на{" "}
+            <span>
+              {startDate && format(new Date(startDate), "dd.MM.yyyy")} -{" "}
+              {eating === "breakfast" && "Завтрак"}
+              {eating === "lunch" && "Обед"}
+              {eating === "dinner" && "Ужин"}
+            </span>
+          </div>
+          <ProductItem products={sumProducts} />
+        </div>
+      )}
+    </>
   );
 };
 

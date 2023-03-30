@@ -65,6 +65,7 @@ const RecipeCard = ({ idRecipe }) => {
       },
       {}
     );
+    // eslint-disable-next-line
   }, [idRecipe]);
 
   const handleOpenModal = () => {
@@ -110,8 +111,6 @@ const RecipeCard = ({ idRecipe }) => {
       }, 3000);
     }
   };
-
-  console.log("item?.products", item?.products)
 
   return (
     <>

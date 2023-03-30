@@ -36,11 +36,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: opacity 0.2 ease-out;
+      &:hover {
+        opacity: .8;
+        transition: opacity 0.2 ease-out;
+      }
     }
 
     &__login {
       font-weight: 700;
       color: $primary-color;
+      transition: opacity 0.2 ease-out;
+      &:hover {
+        opacity: .8;
+        transition: opacity 0.2 ease-out;
+      }
     }
 
     &__line {
@@ -59,6 +69,34 @@
 
     .nav__item {
       padding: 12px 16px;
+      border-radius: 12px;
+      transition: all .2 ease-in-out;
+      &:hover {
+        background-color: $white-color;
+        opacity: .9;
+        transition: all .2 ease-in-out;
+        .nav__link {
+          svg {
+            path {
+              fill: $primary-color;
+              transition: all .2 ease-in-out;
+            }
+          }
+          span {
+            color: $primary-color;
+            transition: all .2 ease-out;
+          }
+          &--products {
+            svg {
+              path {
+                fill: $white-color;
+                stroke: $primary-color;
+                transition: all .2 ease-out;
+              }
+            }
+          }
+        }
+      }
     }
 
     .nav__link {
@@ -66,9 +104,9 @@
         width: 20px;
         height: 20px;
         margin-right: 8px;
-
         path {
           fill: $white-color;
+          transition: all .2 ease-out;
         }
       }
 
@@ -77,6 +115,7 @@
         letter-spacing: .4px;
         letter-spacing: .4px;
         color: $white-color;
+        transition: all .2 ease-out;
       }
 
       &--products {

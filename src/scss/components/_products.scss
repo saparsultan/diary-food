@@ -2,4 +2,19 @@
   padding: 16px;
   background-color: $white-color;
   border-radius: 16px;
+  &-diary {
+    margin-top: 24px;
+    &__title {
+      display: inline-block;
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 133%;
+      color: #1C2035;
+      margin-bottom: 20px;
+      span {
+        font-size: inherit;
+        color: $primary-color;
+      }
+    }
+  }
 }

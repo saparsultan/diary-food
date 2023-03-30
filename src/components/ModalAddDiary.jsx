@@ -28,7 +28,7 @@ const ModalAddDiary = ({ isOpen, onClose, item }) => {
         ?.toString()
         .slice(0, 15)}/${eating}/${item}`
     );
-    push(eatingRef, item);
+    set(eatingRef, item);
     onClose();
   };
 

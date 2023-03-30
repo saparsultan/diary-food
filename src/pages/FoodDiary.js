@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
-import CaloriesFilter from "../components/CaloriesFilter";
-import CategoryFilter from "../components/CategoryFilter";
 import Search from "../components/Search";
 import SelectDate from "../components/SelectDate";
 import SelectEating from "../components/SelectEating";
-import recipeUses from "../data/recipeUses";
+import CaloriesFilter from "../components/CaloriesFilter";
+import CategoryFilter from "../components/CategoryFilter";
+import EatingFilter from "../components/EatingFilter";
 import RecipeUsesFilter from "../components/RecipUsesFilter";
 import RecipeItem from "../components/RecipeItem";
+import eatingList from "../data/eatingList";
+import recipeUses from "../data/recipeUses";
 
 const FoodDiary = ({ allRecipes }) => {
   const [startDate, setStartDate] = React.useState(new Date());
@@ -16,6 +18,7 @@ const FoodDiary = ({ allRecipes }) => {
   const [minCalories, setMinCalories] = React.useState(0);
   const [maxCalories, setMaxCalories] = React.useState(0);
 
+  const [eatingValue, setEatingValue] = React.useState(eatingList);
   const [recipeUsesValue, setRecipeUsesValue] = React.useState(recipeUses);
   const [list, setList] = React.useState([]);
 
@@ -45,6 +48,15 @@ const FoodDiary = ({ allRecipes }) => {
 
   const handleChangeEating = (value) => {
     setEating(value.target.value);
+  };
+
+  const handleChangeEatingList = (e) => {
+    const { value, checked } = e.target;
+    return setEatingValue((pre) =>
+      pre.map((item) =>
+        item.name === value ? { ...item, check: checked } : item
+      )
+    );
   };
 
   const handleChangeRecipeUses = (e) => {
@@ -84,6 +96,24 @@ const FoodDiary = ({ allRecipes }) => {
         }
         return result;
       });
+    }
+
+    if (eatingValue[0].check) {
+      updatedList = updatedList.filter(
+        (item) => item[1].breakfast === eatingValue[0].check
+      );
+    }
+
+    if (eatingValue[1].check) {
+      updatedList = updatedList.filter(
+        (item) => item[1].lunch === eatingValue[1].check
+      );
+    }
+
+    if (eatingValue[2].check) {
+      updatedList = updatedList.filter(
+        (item) => item[1].dinner === eatingValue[2].check
+      );
     }
 
     if (recipeUsesValue[0].check) {
@@ -131,7 +161,8 @@ const FoodDiary = ({ allRecipes }) => {
 
   useEffect(() => {
     applyFilters();
-  }, [query, category, recipeUsesValue, minCalories, maxCalories]);
+    // eslint-disable-next-line
+  }, [query, category, eatingValue, recipeUsesValue, minCalories, maxCalories]);
 
   return (
     <div className="content__wrap">
@@ -147,7 +178,6 @@ const FoodDiary = ({ allRecipes }) => {
               data={data}
               date={startDate}
               eating={eating}
-              isDiary
             />
           ))}
         </div>
@@ -160,6 +190,10 @@ const FoodDiary = ({ allRecipes }) => {
           maxCalories={maxCalories}
           handleChangeMinCalories={handleChangeMinCalories}
           handleChangeMaxCalories={handleChangeMaxCalories}
+        />
+        <EatingFilter
+          data={eatingValue}
+          handleChangeEatingList={handleChangeEatingList}
         />
         <RecipeUsesFilter
           data={recipeUsesValue}

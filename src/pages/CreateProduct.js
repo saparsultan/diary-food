@@ -56,6 +56,13 @@ const CreateProduct = ({ isAuth }) => {
       setTimeout(() => {
         handleCloseModal();
       }, 3000);
+      setNewName("")
+      setSelectUnit("г(мл)")
+      setNewWeight(100)
+      setNewCalories(0)
+      setNewProteins(0)
+      setNewFats(0)
+      setNewCarbs(0)
     }
   };
 

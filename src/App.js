@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  limitToLast,
-  query,
-} from "firebase/database";
-import { auth } from "./firebase-config";
+import { ref, onValue, limitToLast, query } from "firebase/database";
+import { auth, database } from "./firebase-config";
 import Landing from "./pages/Landing";
 import Home from "./pages/Home";
 import Header from "./components/Header";
@@ -79,13 +73,11 @@ function App() {
   let limitNumber = 100;
 
   useEffect(() => {
-    const db = getDatabase();
-    const recipes = ref(db, "recipes");
+    const recipes = ref(database, "recipes");
     const lastTenArticlesQuery = query(recipes, limitToLast(limitNumber));
     const unregisterFunction = onValue(lastTenArticlesQuery, (snapshot) => {
       const newValObj = snapshot.val();
       const keys = Object.entries(newValObj);
-      console.log("newObjArray", keys);
       setAllRecipes(keys);
     });
 

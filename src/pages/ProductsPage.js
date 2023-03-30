@@ -21,7 +21,6 @@ const ProductsPage = () => {
     }
     return cleanup;
   }, []);
-  console.log("products", products);
 
   return (
     <div className="products">
