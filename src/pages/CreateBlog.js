@@ -7,7 +7,7 @@ import { auth, database, storage } from "../firebase-config";
 const CreateBlog = () => {
   const userName = localStorage.getItem("user.name");
   const [heading, setHeading] = React.useState("");
-  const [text, setText] = React.useState(null);
+  const [text, setText] = React.useState("");
   const [tags, setTags] = React.useState("");
   const [imageUpload, setImageUpload] = React.useState();
 
@@ -25,7 +25,13 @@ const CreateBlog = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-    if (auth?.currentUser && heading !== null && text !== null && imageUpload) {
+    if (
+      auth?.currentUser &&
+      heading !== "" &&
+      text !== "" &&
+      tags !== "" &&
+      imageUpload
+    ) {
       await uploadBytesResumable(imageRef, imageUpload).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) =>
           push(refDatabase(database, "blogs/"), {
@@ -38,11 +44,14 @@ const CreateBlog = () => {
           })
         );
       });
+      setHeading("");
+      setText("");
+      setTags("");
     }
   };
 
   return (
-    <>
+    <form onSubmit={onSubmit}>
       <div className="form-block">
         <div className="form-item">
           <label className="form-item__label">Заголовок:</label>
@@ -133,11 +142,11 @@ const CreateBlog = () => {
         </div>
       </div>
       <div className="footer">
-        <button className="btn" onClick={onSubmit}>
-          Сохранить
+        <button className="btn btn--one" type="submit">
+          Создать
         </button>
       </div>
-    </>
+    </form>
   );
 };
 

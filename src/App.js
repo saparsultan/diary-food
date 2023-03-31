@@ -147,7 +147,7 @@ function App() {
                       exact
                       element={<FoodDiary allRecipes={allRecipes} />}
                     />
-                    <Route path={PRODUCTS} exact element={<ProductsPage />} />
+                    <Route path={PRODUCTS} exact element={<ProductsPage allRecipes={allRecipes} />} />
                     <Route path={BLOGS} exact element={<AllBlogs />} />
                     <Route path={BLOG_PAGE} exact element={<BlogPage />} />
                     <Route path={FAVORITES} exact element={<Favorites />} />

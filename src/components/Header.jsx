@@ -51,7 +51,7 @@ const Header = ({withFilter}) => {
                   case MEASURING:
                     return "Вес и параметры";
                   case PRODUCTS:
-                    return "Все продукты";
+                    return "Список покупок";
                   case LOGIN:
                     return "Авторизация";
                   case REGISTRATION:

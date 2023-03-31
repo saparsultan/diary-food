@@ -209,7 +209,7 @@ const Menu = () => {
                     />
                   </svg>
                   <span className={isActive ? activeClassName : undefined}>
-                    Все продукты
+                    Список покупок
                   </span>
                 </>
               )}
