@@ -29,10 +29,10 @@ const Menu = () => {
       <div className="user">
         <div className="user__header">
           <div className="user__avatar">
-            {userName ? userName[0]?.toUpperCase() : "Г"}
+            {isAuth && userName ? userName[0]?.toUpperCase() : "Г"}
           </div>
           <div className="user__text">
-            <div className="user__name">{userName ? userName : "Гость"}</div>
+            <div className="user__name">{isAuth && userName ? userName : "Гость"}</div>
             {isAuth && (
               <Link to={PROFILE} className="user__link">
                 В личный кабинет

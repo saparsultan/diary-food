@@ -64,6 +64,10 @@ function App() {
         localStorage.setItem("user.creation", user?.metadata?.creationTime);
       } else {
         localStorage.setItem("isAuth", Boolean(false));
+        localStorage.removeItem("user.uid");
+        localStorage.removeItem("user.email");
+        localStorage.removeItem("user.name");
+        localStorage.removeItem("user.creation");
         return;
       }
     });
@@ -147,7 +151,11 @@ function App() {
                       exact
                       element={<FoodDiary allRecipes={allRecipes} />}
                     />
-                    <Route path={PRODUCTS} exact element={<ProductsPage allRecipes={allRecipes} />} />
+                    <Route
+                      path={PRODUCTS}
+                      exact
+                      element={<ProductsPage allRecipes={allRecipes} />}
+                    />
                     <Route path={BLOGS} exact element={<AllBlogs />} />
                     <Route path={BLOG_PAGE} exact element={<BlogPage />} />
                     <Route path={FAVORITES} exact element={<Favorites />} />

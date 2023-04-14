@@ -1,18 +1,26 @@
 import { get, ref } from "firebase/database";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { format } from 'date-fns';
+import ruLocale from 'date-fns/locale/ru';
+import "chart.js/auto";
+import { Line } from "react-chartjs-2";
 import "react-tabs/style/react-tabs.scss";
 import EmptyAddMeasuring from "../components/EmptyAddMeasuring";
 import SelectDate from "../components/SelectDate";
 import { auth, database } from "../firebase-config";
 
 const Measuring = () => {
+  
   const [startDate, setStartDate] = React.useState(new Date());
   const [measuring, setMeasuring] = React.useState(null);
-
-  const handleSelectDate = (value) => {
-    setStartDate(value);
-  };
+  const [data, setData] = React.useState([]);
+  const [keyDates, setKeyDates] = React.useState([]);
+  const [measuringWeightChart, setMeasuringWeightChart] = React.useState([]);
+  const [measuringBreastChart, setMeasuringBreastChart] = React.useState([]);
+  const [measuringWaistChart, setMeasuringWaistChart] = React.useState([]);
+  const [measuringBellyChart, setMeasuringBellyChart] = React.useState([]);
+  const [measuringThighChart, setMeasuringThighChart] = React.useState([]);
 
   useEffect(() => {
     const getMeasuring = async () => {
@@ -33,6 +41,96 @@ const Measuring = () => {
     }
     return cleanup();
   }, [startDate]);
+
+  useEffect(() => {
+    const getMeasuring = async () => {
+      const measuringRef = ref(database, `measuring/${auth?.currentUser?.uid}`);
+      const snapshotMeasuring = await get(measuringRef);
+      const dataMeasuringDates = (await snapshotMeasuring.val())
+        ? Object.keys(snapshotMeasuring.val())
+        : null;
+
+      const dateComparison = (a, b) => {
+        const date1 = new Date(a);
+        const date2 = new Date(b);
+        return date1 - date2;
+      };
+
+      const chartSorted =
+        dataMeasuringDates && dataMeasuringDates.sort(dateComparison);
+      const sortedData = chartSorted.length > 0 && chartSorted.map((key) => snapshotMeasuring.val()[key]);
+
+      const measuringWeight = sortedData.map(
+        (item) => item?.facts?.measuringWeight
+      );
+      const measuringBreast = sortedData.map(
+        (item) => item?.facts?.measuringBreast
+      );
+      const measuringWaist = sortedData.map(
+        (item) => item?.facts?.measuringWaist
+      );
+      const measuringBelly = sortedData.map(
+        (item) => item?.facts?.measuringBelly
+      );
+      const measuringThigh = sortedData.map(
+        (item) => item?.facts?.measuringThigh
+      );
+
+      const formattedFullDate = chartSorted.map(item => new Date(item));
+      const formattedDate = formattedFullDate.map(item => format(item, 'dd MMM yyyy', { locale: ruLocale }));
+
+      setKeyDates(formattedDate);
+      setMeasuringWeightChart(measuringWeight);
+      setMeasuringBreastChart(measuringBreast);
+      setMeasuringWaistChart(measuringWaist);
+      setMeasuringBellyChart(measuringBelly);
+      setMeasuringThighChart(measuringThigh);
+    };
+    function cleanup() {
+      getMeasuring();
+    }
+    return cleanup();
+  }, [startDate]);
+
+  useEffect(() => {
+    const data = {
+      labels: keyDates,
+      datasets: [
+        {
+          label: "Вес",
+          data: measuringWeightChart,
+        },
+        {
+          label: "Грудь",
+          data: measuringBreastChart,
+        },
+        {
+          label: "Талия",
+          data: measuringWaistChart,
+        },
+        {
+          label: "Живот",
+          data: measuringBellyChart,
+        },
+        {
+          label: "Бедро",
+          data: measuringThighChart,
+        },
+      ],
+    };
+    setData(data);
+  }, [
+    keyDates,
+    measuringWeightChart,
+    measuringBreastChart,
+    measuringWaistChart,
+    measuringBellyChart,
+    measuringThighChart,
+  ]);
+
+  const handleSelectDate = (value) => {
+    setStartDate(value);
+  };
 
   return (
     <>
@@ -105,7 +203,12 @@ const Measuring = () => {
             </div>
           )}
         </TabPanel>
-        <TabPanel>Здесь будет график</TabPanel>
+        <TabPanel>
+          <div className="content__wrap">
+            <div className="chart__title">Мой график измерения</div>
+            <Line data={data} />
+          </div>
+        </TabPanel>
       </Tabs>
     </>
   );
