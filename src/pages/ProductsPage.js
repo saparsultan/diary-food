@@ -98,7 +98,7 @@ const ProductsPage = ({ allRecipes }) => {
               <div className="shop-item" key={data[0] + index}>
                 <div className="shop-item__title">{data[1].name}</div>
                 <div className="shop-products">
-                  {data[1].products.map(({ id, name, weight, unit }) => (
+                  {data[1].products.map(({ id, name, amount, unit }) => (
                     <div className="shop-product" key={id}>
                       {shopProducts.length > 0 && shopProducts.includes(id) ? (
                         <div
@@ -116,7 +116,7 @@ const ProductsPage = ({ allRecipes }) => {
                       <div className="shop-product__name">{name}</div>
                       <div className="shop-product__line"></div>
                       <div className="shop-product__sum">
-                        <span>{weight}</span>&nbsp;
+                        <span>{amount}</span>&nbsp;
                         <span>{unit.toLowerCase()}</span>
                       </div>
                     </div>

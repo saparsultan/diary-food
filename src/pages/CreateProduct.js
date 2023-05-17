@@ -94,7 +94,7 @@ const CreateProduct = ({ isAuth }) => {
                 <option value="г(мл)">100 г(мл)</option>
                 <option value="Пачка">Пачка</option>
                 <option value="Порция">Порция</option>
-                <option value="Штука">Штука</option>
+                <option value="Штук">Штука</option>
                 <option value="Таблетка">Таблетка</option>
               </select>
             </div>
@@ -110,7 +110,7 @@ const CreateProduct = ({ isAuth }) => {
                         return "одной пачки";
                       case "Порция":
                         return "одной порции";
-                      case "Штука":
+                      case "Штук":
                         return "одной штуки";
                       case "Таблетка":
                         return "одной таблетки";
