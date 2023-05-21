@@ -10,7 +10,6 @@ import {
 } from "firebase/database";
 import "react-tabs/style/react-tabs.scss";
 import { storage, database, auth } from "../firebase-config";
-import eatingList from "../data/eatingList";
 import recipeUses from "../data/recipeUses";
 import categoriesDishes from "../data/categoriesDishes";
 import EmptyCreate from "../components/EmptyCreate";
@@ -21,7 +20,6 @@ const CreateRecipe = ({ isAuth }) => {
   const [newName, setNewName] = useState("");
   const [category, setCategory] = useState("Все тиы блюд");
   const [recipeUsesValue, setRecipeUsesValue] = useState(recipeUses);
-  const [eatingValue, setEatingValue] = useState(eatingList);
   const [newDescription, setNewDescription] = useState("");
   const [newMethods, setNewMethods] = useState("");
   const [imageUpload, setImageUpload] = useState();
@@ -43,7 +41,6 @@ const CreateRecipe = ({ isAuth }) => {
     });
     function cleanup() {
       unregisterFunction();
-      // recipeUses.map((item) => setRecipeUsesValue((pre) => [...pre, item]));
     }
     return cleanup;
   }, []);
@@ -75,15 +72,6 @@ const CreateRecipe = ({ isAuth }) => {
       </option>
     );
   });
-
-  const handleChangeEating = (e) => {
-    const { value, checked } = e.target;
-    return setEatingValue((pre) =>
-      pre.map((item) =>
-        item.name === value ? { ...item, check: checked } : item
-      )
-    );
-  };
 
   const handleChangeRecipeUses = (e) => {
     const { value, checked } = e.target;
@@ -150,15 +138,14 @@ const CreateRecipe = ({ isAuth }) => {
             description: newDescription,
             newMethods: newMethods,
             image: url,
-            breakfast: eatingValue[0].check,
-            lunch: eatingValue[1].check,
-            dinner: eatingValue[2].check,
-            isOnion: recipeUsesValue[0].check,
-            isMilk: recipeUsesValue[1].check,
-            isEggs: recipeUsesValue[2].check,
-            isPig: recipeUsesValue[3].check,
-            isFish: recipeUsesValue[4].check,
-            isAlcohol: recipeUsesValue[5].check,
+            isMilk: recipeUsesValue[0].check,
+            isEggs: recipeUsesValue[1].check,
+            isPeanut: recipeUsesValue[2].check,
+            isNuts: recipeUsesValue[3].check,
+            isSoy: recipeUsesValue[4].check,
+            isFish: recipeUsesValue[5].check,
+            isClam: recipeUsesValue[6].check,
+            isWheat: recipeUsesValue[7].check,
             author: {
               name: auth?.currentUser?.displayName,
               uid: auth?.currentUser?.uid,
@@ -209,31 +196,7 @@ const CreateRecipe = ({ isAuth }) => {
                 </div>
                 <div className="form-item">
                   <label className="form-item__label">
-                    Прием пищи:
-                  </label>
-                  <ul className="recipe-uses">
-                    {eatingValue.map((item, index) => {
-                      return (
-                        <li key={item?.name + index}>
-                          <input
-                            type="checkbox"
-                            id={`custom-checkboxE-${index}`}
-                            name={item.name}
-                            checked={item.check}
-                            value={item.name}
-                            onChange={handleChangeEating}
-                          />
-                          <label htmlFor={`custom-checkboxE-${index}`}>
-                            {item?.name}
-                          </label>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-                <div className="form-item">
-                  <label className="form-item__label">
-                    В рецепте используются:
+                    В рецепте используются пищевые аллергены:
                   </label>
                   <ul className="recipe-uses">
                     {recipeUsesValue.map((item, index) => {

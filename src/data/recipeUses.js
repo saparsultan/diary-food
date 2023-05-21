@@ -1,32 +1,42 @@
 const recipeUses = [
   {
     id: 1,
-    name: "Лук",
-    check: false,
-  },
-  {
-    id: 2,
     name: "Молоко",
     check: false,
   },
   {
+    id: 2,
+    name: "Яйцо",
+    check: false,
+  },
+  {
     id: 3,
-    name: "Яйца",
+    name: "Арахис",
     check: false,
   },
   {
     id: 4,
-    name: "Свинина",
+    name: "Орехи",
     check: false,
   },
   {
     id: 5,
-    name: "Рыба",
+    name: "Соя",
     check: false,
   },
   {
     id: 6,
-    name: "Алкоголь",
+    name: "Рыба",
+    check: false,
+  },
+  {
+    id: 7,
+    name: "Моллюск",
+    check: false,
+  },
+  {
+    id: 8,
+    name: "Пшеница",
     check: false,
   },
 ];

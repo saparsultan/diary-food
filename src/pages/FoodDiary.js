@@ -4,10 +4,10 @@ import SelectDate from "../components/SelectDate";
 import SelectEating from "../components/SelectEating";
 import CaloriesFilter from "../components/CaloriesFilter";
 import CategoryFilter from "../components/CategoryFilter";
-import EatingFilter from "../components/EatingFilter";
+// import EatingFilter from "../components/EatingFilter";
 import RecipeUsesFilter from "../components/RecipUsesFilter";
 import RecipeItem from "../components/RecipeItem";
-import eatingList from "../data/eatingList";
+// import eatingList from "../data/eatingList";
 import recipeUses from "../data/recipeUses";
 
 const FoodDiary = ({ allRecipes }) => {
@@ -18,7 +18,7 @@ const FoodDiary = ({ allRecipes }) => {
   const [minCalories, setMinCalories] = React.useState(0);
   const [maxCalories, setMaxCalories] = React.useState(0);
 
-  const [eatingValue, setEatingValue] = React.useState(eatingList);
+  // const [eatingValue, setEatingValue] = React.useState(eatingList);
   const [recipeUsesValue, setRecipeUsesValue] = React.useState(recipeUses);
   const [list, setList] = React.useState([]);
 
@@ -50,14 +50,14 @@ const FoodDiary = ({ allRecipes }) => {
     setEating(value.target.value);
   };
 
-  const handleChangeEatingList = (e) => {
-    const { value, checked } = e.target;
-    return setEatingValue((pre) =>
-      pre.map((item) =>
-        item.name === value ? { ...item, check: checked } : item
-      )
-    );
-  };
+  // const handleChangeEatingList = (e) => {
+  //   const { value, checked } = e.target;
+  //   return setEatingValue((pre) =>
+  //     pre.map((item) =>
+  //       item.name === value ? { ...item, check: checked } : item
+  //     )
+  //   );
+  // };
 
   const handleChangeRecipeUses = (e) => {
     const { value, checked } = e.target;
@@ -98,57 +98,69 @@ const FoodDiary = ({ allRecipes }) => {
       });
     }
 
-    if (eatingValue[0].check) {
-      updatedList = updatedList.filter(
-        (item) => item[1].breakfast === eatingValue[0].check
-      );
-    }
+    // if (eatingValue[0].check) {
+    //   updatedList = updatedList.filter(
+    //     (item) => item[1].breakfast === eatingValue[0].check
+    //   );
+    // }
 
-    if (eatingValue[1].check) {
-      updatedList = updatedList.filter(
-        (item) => item[1].lunch === eatingValue[1].check
-      );
-    }
+    // if (eatingValue[1].check) {
+    //   updatedList = updatedList.filter(
+    //     (item) => item[1].lunch === eatingValue[1].check
+    //   );
+    // }
 
-    if (eatingValue[2].check) {
-      updatedList = updatedList.filter(
-        (item) => item[1].dinner === eatingValue[2].check
-      );
-    }
+    // if (eatingValue[2].check) {
+    //   updatedList = updatedList.filter(
+    //     (item) => item[1].dinner === eatingValue[2].check
+    //   );
+    // }
 
     if (recipeUsesValue[0].check) {
       updatedList = updatedList.filter(
-        (item) => item[1].isOnion !== recipeUsesValue[0].check
+        (item) => item[1].isMilk !== recipeUsesValue[0].check
       );
     }
 
     if (recipeUsesValue[1].check) {
       updatedList = updatedList.filter(
-        (item) => item[1].isMilk !== recipeUsesValue[1].check
+        (item) => item[1].isEggs !== recipeUsesValue[1].check
       );
     }
 
     if (recipeUsesValue[2].check) {
       updatedList = updatedList.filter(
-        (item) => item[1].isEggs !== recipeUsesValue[2].check
+        (item) => item[1].isPeanut !== recipeUsesValue[2].check
       );
     }
 
     if (recipeUsesValue[3].check) {
       updatedList = updatedList.filter(
-        (item) => item[1].isPig !== recipeUsesValue[3].check
+        (item) => item[1].isNuts !== recipeUsesValue[3].check
       );
     }
 
     if (recipeUsesValue[4].check) {
       updatedList = updatedList.filter(
-        (item) => item[1].isFish !== recipeUsesValue[4].check
+        (item) => item[1].isSoy !== recipeUsesValue[4].check
       );
     }
 
     if (recipeUsesValue[5].check) {
       updatedList = updatedList.filter(
-        (item) => item[1].isAlcohol !== recipeUsesValue[5].check
+        (item) => item[1].isFish !== recipeUsesValue[5].check
+      );
+    }
+
+    if (recipeUsesValue[6].check) {
+      updatedList = updatedList.filter(
+        (item) => item[1].isClam !== recipeUsesValue[6].check
+      );
+    }
+
+    if (recipeUsesValue[7].check) {
+      updatedList = updatedList.filter(
+        (item) => item[1].isWheat !== recipeUsesValue[7].check
       );
     }
 
@@ -162,7 +174,7 @@ const FoodDiary = ({ allRecipes }) => {
   useEffect(() => {
     applyFilters();
     // eslint-disable-next-line
-  }, [query, category, eatingValue, recipeUsesValue, minCalories, maxCalories]);
+  }, [query, category, recipeUsesValue, minCalories, maxCalories]);
 
   return (
     <div className="content__wrap">
@@ -191,10 +203,10 @@ const FoodDiary = ({ allRecipes }) => {
           handleChangeMinCalories={handleChangeMinCalories}
           handleChangeMaxCalories={handleChangeMaxCalories}
         />
-        <EatingFilter
+        {/* <EatingFilter
           data={eatingValue}
           handleChangeEatingList={handleChangeEatingList}
-        />
+        /> */}
         <RecipeUsesFilter
           data={recipeUsesValue}
           handleChangeRecipeUses={handleChangeRecipeUses}

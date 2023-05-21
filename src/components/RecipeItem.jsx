@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ref, set, get, remove } from "firebase/database";
 import { auth, database } from "../firebase-config";
 import ModalNotify from "./ModalNotify";
 import calories from "../assets/images/calories.svg";
-import { FAVORITES } from "../utils/consts";
 
-const RecipeItem = ({
-  data,
-  date,
-  eating,
-  handleCheckClick,
-}) => {
-  const { pathname } = useLocation();
+const RecipeItem = ({ data, date, eating, handleCheckClick }) => {
   let initvalue = 0;
   const userId = auth?.currentUser?.uid;
   const [favorites, setFavorites] = useState([]);
@@ -173,8 +166,8 @@ const RecipeItem = ({
         >
           {data[1]?.name}
         </Link>
-        <div className="recipe__footer" >
-          {isDiaryFoodId === true && pathname !== FAVORITES ? (
+        <div className="recipe__footer">
+          {isDiaryFoodId === true ? (
             <div
               className="btn btn--block btn--one"
               onClick={handleRemoveDiary}
@@ -183,16 +176,14 @@ const RecipeItem = ({
               <span>Удалить</span>
             </div>
           ) : (
-            pathname !== FAVORITES && (
-              <button
-                className="btn btn--block btn--one"
-                onClick={handleAddDiary}
-              >
-                <span>В дневник</span>
-              </button>
-            )
+            <button
+              className="btn btn--block btn--one"
+              onClick={handleAddDiary}
+            >
+              <span>В дневник</span>
+            </button>
           )}
-          <div className="nutri-value nutri-value--one" style={pathname === FAVORITES ? {marginLeft: "0"} : {}}>
+          <div className="nutri-value nutri-value--one">
             <div className="nutri-value__info">
               <img src={calories} alt="Калории" width="20px" height="20px" />
               <div className="nutri-value__sum">

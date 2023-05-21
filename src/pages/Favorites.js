@@ -3,6 +3,8 @@ import { get, ref } from "firebase/database";
 import { auth, database } from "../firebase-config";
 import RecipeItem from "../components/RecipeItem";
 import EmptyAdd from "../components/EmptyAdd";
+import SelectDate from "../components/SelectDate";
+import SelectEating from "../components/SelectEating";
 
 const Favorites = () => {
   const userId = auth?.currentUser?.uid;
@@ -12,6 +14,8 @@ const Favorites = () => {
   const [filterData, setFilterData] = useState(
     data?.filter((row) => favorites?.includes(row[0]))
   );
+  const [startDate, setStartDate] = React.useState(new Date());
+  const [eating, setEating] = React.useState("breakfast");
 
   useEffect(() => {
     const getRecipes = async () => {
@@ -52,8 +56,18 @@ const Favorites = () => {
     setIsUpdatedFavorites(!isUpdatedFavorites);
   };
 
+  const handleSelectDate = (value) => {
+    setStartDate(value);
+  };
+
+  const handleChangeEating = (value) => {
+    setEating(value.target.value);
+  };
+
   return (
     <div className="content__wrap">
+      <SelectDate selected={startDate} handleSelectDate={handleSelectDate} />
+      <SelectEating value={eating} handleChangeEating={handleChangeEating} />
       {filterData.length > 0 ? (
         <>
           <div className="recipe-grid">
@@ -62,6 +76,8 @@ const Favorites = () => {
                 <RecipeItem
                   data={item}
                   key={i + item[0]}
+                  date={startDate}
+                  eating={eating}
                   handleCheckClick={handleCheckClick}
                 />
               ))}

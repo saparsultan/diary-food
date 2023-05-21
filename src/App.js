@@ -145,7 +145,13 @@ function App() {
                       exact
                       element={<CreateProduct isAuth={isAuth} />}
                     />
-                    <Route path={CREATE_BLOG} exact element={<CreateBlog />} />
+                    {auth?.currentUser && (
+                      <Route
+                        path={CREATE_BLOG}
+                        exact
+                        element={<CreateBlog />}
+                      />
+                    )}
                     <Route
                       path={RECIPES}
                       exact

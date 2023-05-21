@@ -3,7 +3,7 @@ const RecipeUsesFilter = ({ data, handleChangeRecipeUses }) => {
     <div className="filter">
       <div className="filter__title">
         Не включать
-        <br /> в рецепт
+        <br /> в рецепт пищевые аллергеныы
       </div>
       <div className="filter__list filter__recipe-uses">
         {data.map((item, index) => {
